@@ -1,1 +1,13 @@
 language: dart
+addons:
+  apt:
+    # Flutter depends on /usr/lib/x86_64-linux-gnu/libstdc++.so.6 version GLIBCXX_3.4.18
+    sources:
+      - ubuntu-toolchain-r-test # if we don't specify this, the libstdc++6 we get is the wrong version
+    packages:
+      - libstdc++6
+      - fonts-droid-fallback
+before_script:
+  - git clone https://https://github.com/S4VVAS/PVT_gr74_PROJECT_FRONTEND.git -b beta
+script:
+  - ./PVT_gr74_PROJECT_FRONTEND/flutter test

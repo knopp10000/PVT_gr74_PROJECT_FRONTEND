@@ -82,9 +82,6 @@ class StalkerModel{
       Map jsonWork = jsonDecode(tempWork);
       workLocation = Location.fromJson(jsonWork);
     }
-    
-    
-
 
   }
 
