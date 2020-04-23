@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'workerData.dart';
 import 'package:google_map_location_picker/google_map_location_picker.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:dotenv/dotenv.dart' show load, env;
 
-
-
-void main() => runApp(MyApp());
+void main() {
+  load();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -30,14 +32,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
   StalkerModel _stalkerModel = new StalkerModel();
-  String apiKey = '_________________';
+  String apiKey = env['API_KEY'];
 
   void _incrementCounter() {
-    setState(() {
-       _counter--;
-    });
+    setState(() {});
   }
 
   @override
@@ -45,12 +44,12 @@ class _MyHomePageState extends State<MyHomePage> {
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
-     return Scaffold(
+    return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-        actions: <Widget>[
+          // Here we take the value from the MyHomePage object that was created by
+          // the App.build method, and use it to set our appbar title.
+          title: Text(widget.title),
+          actions: <Widget>[
             IconButton(
               icon: Icon(Icons.settings_applications),
               tooltip: 'Settings',
@@ -58,30 +57,32 @@ class _MyHomePageState extends State<MyHomePage> {
                 openPage(context);
               },
             ),
-    ]
-      ),
+          ]),
       body: ListView.builder(
-              padding: const EdgeInsets.all(8),
-              itemCount: _stalkerModel.coWorkers.length, 
-              itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  height: 65,
-                  color: Colors.amber,
-                  child: ListTile(
-                        leading: _stalkerModel.coWorkers[index].location==WorkerLocations.home?new Icon(Icons.home):_stalkerModel.coWorkers[index].location==WorkerLocations.office?new Icon(Icons.business_center):new Icon(Icons.not_listed_location),
-                        title: Text('${_stalkerModel.coWorkers[index].username}'),
-                        subtitle: Text('Hours since update: ${DateTime.now().difference(_stalkerModel.coWorkers[index].lastUpdate).inHours}'),
-                        
-                  )
-                );
-              }
-           ),
+          padding: const EdgeInsets.all(8),
+          itemCount: _stalkerModel.coWorkers.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Container(
+                height: 65,
+                color: Colors.amber,
+                child: ListTile(
+                  leading: _stalkerModel.coWorkers[index].location ==
+                          WorkerLocations.home
+                      ? new Icon(Icons.home)
+                      : _stalkerModel.coWorkers[index].location ==
+                              WorkerLocations.office
+                          ? new Icon(Icons.business_center)
+                          : new Icon(Icons.not_listed_location),
+                  title: Text('${_stalkerModel.coWorkers[index].username}'),
+                  subtitle: Text(
+                      'Hours since update: ${DateTime.now().difference(_stalkerModel.coWorkers[index].lastUpdate).inHours}'),
+                ));
+          }),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add_to_home_screen)
-      ), 
+          onPressed: _incrementCounter,
+          tooltip: 'Increment',
+          child: Icon(Icons.add_to_home_screen)),
       bottomNavigationBar: BottomAppBar(
         shape: CircularNotchedRectangle(),
         notchMargin: 4.0,
@@ -89,87 +90,88 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            IconButton(icon: Icon(Icons.location_searching),
-              onPressed: (){},
+            IconButton(
+              icon: Icon(Icons.location_searching),
+              onPressed: () {},
             ),
-            IconButton(icon: Icon(Icons.refresh),
-              onPressed: (){
+            IconButton(
+              icon: Icon(Icons.refresh),
+              onPressed: () {
                 setState(() {
-                  _stalkerModel.coWorkers.shuffle();  
+                  _stalkerModel.coWorkers.shuffle();
                 });
               },
             ),
           ],
-          ),
+        ),
       ),
     );
   }
 
-  //SETTINGS PAGE 
-  void openPage(BuildContext context){
-      final _usernameController = TextEditingController();
-      _usernameController.text = _stalkerModel.myself.username;
-      Navigator.push(context, MaterialPageRoute(
-        builder: (BuildContext context) {
-            return Scaffold(
-                appBar: AppBar(
-                  title: const Text('Settings Page'),
+  //SETTINGS PAGE
+  void openPage(BuildContext context) {
+    final _usernameController = TextEditingController();
+    _usernameController.text = _stalkerModel.myself.username;
+    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
+      return Scaffold(
+          appBar: AppBar(
+            title: const Text('Settings Page'),
+          ),
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  'Set Username',
                 ),
-                 body: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        'Set Username',
-                      ),
-                      TextFormField(
-                          controller: _usernameController,
-                          autovalidate: true,
-                          decoration: const InputDecoration(
-                            icon: Icon(Icons.person),
-                            hintText: 'What do people call you?',
-                            labelText: 'Name *',
-                          ),
-                          validator: (String value) {
-                            if(value.isEmpty){
-                              return 'You need a username!';
-                            }
-                            return value.contains('@') ? 'Do not use the @ char.' : null;
-                          },
-                        ), 
-                        RaisedButton(
-                          onPressed: (){
-                             String username = _usernameController.text;
-                             _stalkerModel.myself.username = username;
-                             _stalkerModel.saveData();
-                          },
-                          child: Text('Save Username'),
-                        ), 
-                         RaisedButton(
-                          onPressed: () async{
-                             LocationResult result = await showLocationPicker(context, apiKey);                             
-                             //print(' Lat: ${result.latLng.latitude} Long: ${result.latLng.longitude}');
-                             _stalkerModel.homeLocation = Location.fromLatLng(result.latLng);
-                          },
-                          child: Text('Choose Home Location'),
-                        ), 
-                        RaisedButton(
-                          onPressed: () async{
-                             LocationResult result = await showLocationPicker(context, apiKey);                             
-                             //print(' Lat: ${result.latLng.latitude} Long: ${result.latLng.longitude}');
-                             _stalkerModel.workLocation = Location.fromLatLng(result.latLng);
-                          },
-                          child: Text('Choose Work Location'),
-                        )
-                    ],
+                TextFormField(
+                  controller: _usernameController,
+                  autovalidate: true,
+                  decoration: const InputDecoration(
+                    icon: Icon(Icons.person),
+                    hintText: 'What do people call you?',
+                    labelText: 'Name *',
                   ),
-                 )
-            ); 
-        }    
-      ));
+                  validator: (String value) {
+                    if (value.isEmpty) {
+                      return 'You need a username!';
+                    }
+                    return value.contains('@')
+                        ? 'Do not use the @ char.'
+                        : null;
+                  },
+                ),
+                RaisedButton(
+                  onPressed: () {
+                    String username = _usernameController.text;
+                    _stalkerModel.myself.username = username;
+                    _stalkerModel.saveData();
+                  },
+                  child: Text('Save Username'),
+                ),
+                RaisedButton(
+                  onPressed: () async {
+                    LocationResult result =
+                        await showLocationPicker(context, apiKey);
+                    //print(' Lat: ${result.latLng.latitude} Long: ${result.latLng.longitude}');
+                    _stalkerModel.homeLocation =
+                        Location.fromLatLng(result.latLng);
+                  },
+                  child: Text('Choose Home Location'),
+                ),
+                RaisedButton(
+                  onPressed: () async {
+                    LocationResult result =
+                        await showLocationPicker(context, apiKey);
+                    //print(' Lat: ${result.latLng.latitude} Long: ${result.latLng.longitude}');
+                    _stalkerModel.workLocation =
+                        Location.fromLatLng(result.latLng);
+                  },
+                  child: Text('Choose Work Location'),
+                )
+              ],
+            ),
+          ));
+    }));
   }
-
-
-
-
 }
