@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:history_go/src/login/welcomePage.dart';
 //import 'package:google_map_location_picker/google_map_location_picker.dart';
 //import 'package:google_maps_flutter/google_maps_flutter.dart';
 //import 'package:dotenv/dotenv.dart' show load, env;
 
-import 'src/welcomePage.dart';
 
 void main() => runApp(MyApp());
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:history_go/src/loginPage.dart';
-import 'package:history_go/src/signupPage.dart';
+import 'package:history_go/src/login/loginPage.dart';
+import 'package:history_go/src/login/signupPage.dart';
 
 class WelcomePage extends StatefulWidget {
   WelcomePage({Key key, this.title}) : super(key: key);

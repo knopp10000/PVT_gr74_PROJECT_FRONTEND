@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:history_go/src/loginPage.dart';
+import 'package:history_go/src/login/loginPage.dart';
 
 class SignUpPage extends StatefulWidget {
   SignUpPage({Key key, this.title}) : super(key: key);
