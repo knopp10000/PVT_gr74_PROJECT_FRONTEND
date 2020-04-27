@@ -15,6 +15,7 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   Completer<GoogleMapController> _controller = Completer();
+  int _selectedIndex = 0;
 
   static final CameraPosition _kStockholm = CameraPosition(
     target: LatLng(59.3253159, 18.0398813),
@@ -30,7 +31,36 @@ class _MapPageState extends State<MapPage> {
           onMapCreated: (GoogleMapController controller) {
             _controller.complete(controller);
           },
-        )
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          items: const <BottomNavigationBarItem> [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.map),
+              title: Text('Map'),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.local_play),
+              title: Text('Missions'),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              title: Text('Profile'),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.search),
+              title: Text('Search'),
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Colors.blue,
+          unselectedItemColor: Colors.grey[800],
+          iconSize: 28.0,
+          onTap: (int index) {
+            setState(() {
+              _selectedIndex = index;
+            });
+          }
+        ),
     );
   }
 }
