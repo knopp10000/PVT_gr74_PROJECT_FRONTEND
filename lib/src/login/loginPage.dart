@@ -60,7 +60,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget _submitButton() {
     return InkWell(
         onTap: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => MapPage()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => NavBar()));
         },
         child: Container(
           width: MediaQuery.of(context).size.width,
@@ -175,7 +175,7 @@ class _LoginPageState extends State<LoginPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(
-            'Don\'t have an account ?',
+            'Don\'t have an account?',
             style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
           ),
           SizedBox(
@@ -285,10 +285,5 @@ class _LoginPageState extends State<LoginPage> {
         ],
       ),
     )));
-  }
-
-  //SETTINGS PAGE
-  void openPage(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => MapPage()));
   }
 }
