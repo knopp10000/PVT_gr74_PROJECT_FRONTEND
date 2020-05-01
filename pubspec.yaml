@@ -26,6 +26,7 @@ dependencies:
   shared_preferences: ^0.5.6+3
   dotenv: ^2.0.0
   google_maps_flutter: ^0.5.26+4
+  carousel_pro: ^1.0.0
 
 dev_dependencies:
   flutter_test:
@@ -42,6 +43,11 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  
+  assets:
+    - assets/kaknas.jpg
+    - assets/kaknas2.jpg
+    - assets/kaknas3.jpg
 
   # To add assets to your application, add an assets section, like this:
   # assets:
