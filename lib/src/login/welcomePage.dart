@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:history_go/src/login/loginPage.dart';
 import 'package:history_go/src/login/signupPage.dart';
 

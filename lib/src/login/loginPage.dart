@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:history_go/src/login/signupPage.dart';
-import 'package:history_go/src/mapPage.dart';
+import 'package:history_go/src/navBar.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key, this.title}) : super(key: key);
@@ -11,7 +11,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-
   Widget _backButton() {
     return InkWell(
       onTap: () {
@@ -60,7 +59,8 @@ class _LoginPageState extends State<LoginPage> {
   Widget _submitButton() {
     return InkWell(
         onTap: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => NavBar()));
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => NavBar()));
         },
         child: Container(
           width: MediaQuery.of(context).size.width,
