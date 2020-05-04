@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:history_go/src/infoPage.dart';
 
+import 'perm.dart';
+
 class SearchPage extends StatelessWidget {
   final Color color;
 
@@ -13,7 +15,7 @@ class SearchPage extends StatelessWidget {
       child: Center(
         child: FlatButton(
           onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context) => InfoPage()));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => PermissionPage()));
           },
           child: Text(
             'Kaknästornet',
@@ -21,6 +23,7 @@ class SearchPage extends StatelessWidget {
           ),
         ),
       ),
+
     );
   }
 }
