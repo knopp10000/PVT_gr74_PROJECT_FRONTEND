@@ -7,6 +7,15 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final text = Padding(
+      padding: EdgeInsets.all(8.0),
+      child: Text(
+        'Profilnamn',
+        style: TextStyle(fontSize: 30.0, color: Colors.white),
+      ),
+    );
+
     final picture = Hero(
       tag: 'hero',
       child: Padding(
@@ -74,7 +83,7 @@ class ProfilePage extends StatelessWidget {
         ]),
       ),
       child: Column(
-        children: <Widget>[picture, vanner, badges, bidrag],
+        children: <Widget>[text, picture, vanner, badges, bidrag],
       ),
     );
 
