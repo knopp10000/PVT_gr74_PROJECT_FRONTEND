@@ -28,6 +28,7 @@ dependencies:
   google_maps_flutter: ^0.5.26+4
   carousel_pro: ^1.0.0
   permission_handler: ^5.0.0+hotfix.4
+  permission: ^0.1.7
 
 dev_dependencies:
   flutter_test:
