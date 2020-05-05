@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'settingsPage.dart';
+
 
 class ProfilePage extends StatelessWidget {
   final Color color;
@@ -8,14 +10,32 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+    final app = AppBar(
+      backgroundColor: Colors.blue,
+      title: Text('Profilnamn', style: TextStyle(fontSize: 26.0),),
+
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(
+            Icons.settings,
+            color: Colors.white,
+          ),
+          onPressed: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsPage()));
+          },
+        )
+      ],
+    );
+/*
     final text = Padding(
       padding: EdgeInsets.all(8.0),
       child: Text(
         'Profilnamn',
         style: TextStyle(fontSize: 30.0, color: Colors.white),
       ),
-    );
 
+    );
+*/
     final picture = Hero(
       tag: 'hero',
       child: Padding(
@@ -28,7 +48,9 @@ class ProfilePage extends StatelessWidget {
       ),
     );
 
-    final vanner = Padding(
+    final vanner = Container(
+      width: 330.0,
+      height: 60.0,
       padding: EdgeInsets.symmetric(vertical: 6.0),
       child: RaisedButton(
         shape: RoundedRectangleBorder(
@@ -38,12 +60,13 @@ class ProfilePage extends StatelessWidget {
           //Navigator.of(context).pushNamed();
         },
         color: Colors.lightBlueAccent,
-        padding: EdgeInsets.only(left: 120.0, right: 120.0, top: 15.0, bottom: 15.0),
         child: Text('Mina vänner', style: TextStyle(color: Colors.white)),
       ),
     );
 
-    final badges = Padding(
+    final badges = Container(
+      width: 330.0,
+      height: 60.0,
       padding: EdgeInsets.symmetric(vertical: 6.0),
       child: RaisedButton(
         shape: RoundedRectangleBorder(
@@ -53,12 +76,13 @@ class ProfilePage extends StatelessWidget {
           //Navigator.of(context).pushNamed();
         },
         color: Colors.lightBlueAccent,
-        padding: EdgeInsets.only(left: 120.0, right: 120.0, top: 15.0, bottom: 15.0),
         child: Text('Mina badges', style: TextStyle(color: Colors.white)),
       ),
     );
 
-    final bidrag = Padding(
+    final bidrag = Container(
+      width: 330.0,
+      height: 60.0,
       padding: EdgeInsets.symmetric(vertical: 6.0),
       child: RaisedButton(
         shape: RoundedRectangleBorder(
@@ -68,7 +92,6 @@ class ProfilePage extends StatelessWidget {
           //Navigator.of(context).pushNamed();
         },
         color: Colors.lightBlueAccent,
-        padding: EdgeInsets.only(left: 120.0, right: 120.0, top: 15.0, bottom: 15.0),
         child: Text('Mina bidrag', style: TextStyle(color: Colors.white)),
       ),
     );
@@ -83,7 +106,7 @@ class ProfilePage extends StatelessWidget {
         ]),
       ),
       child: Column(
-        children: <Widget>[text, picture, vanner, badges, bidrag],
+        children: <Widget>[app, picture, vanner, badges, bidrag],
       ),
     );
 
