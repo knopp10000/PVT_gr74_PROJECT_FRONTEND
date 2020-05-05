@@ -26,7 +26,7 @@ class MissionsPage extends StatelessWidget {
           //Navigator.of(context).pushNamed();
         },
         color: Colors.lightBlueAccent,
-        padding: EdgeInsets.only(left: 140.0, right: 140.0, top: 15.0, bottom: 15.0),
+        padding: EdgeInsets.only(left: 130.0, right: 130.0, top: 15.0, bottom: 15.0),
         child: Text('Runda 1', style: TextStyle(color: Colors.white)),
       ),
     );
@@ -41,7 +41,7 @@ class MissionsPage extends StatelessWidget {
           //Navigator.of(context).pushNamed();
         },
         color: Colors.lightBlueAccent,
-        padding: EdgeInsets.only(left: 140.0, right: 140.0, top: 15.0, bottom: 15.0),
+        padding: EdgeInsets.only(left: 130.0, right: 130.0, top: 15.0, bottom: 15.0),
         child: Text('Runda 2', style: TextStyle(color: Colors.white)),
       ),
     );
@@ -56,7 +56,7 @@ class MissionsPage extends StatelessWidget {
           //Navigator.of(context).pushNamed();
         },
         color: Colors.lightBlueAccent,
-        padding: EdgeInsets.only(left: 140.0, right: 140.0, top: 15.0, bottom: 15.0),
+        padding: EdgeInsets.only(left: 130.0, right: 130.0, top: 15.0, bottom: 15.0),
         child: Text('Runda 3', style: TextStyle(color: Colors.white)),
       ),
     );
@@ -71,7 +71,7 @@ class MissionsPage extends StatelessWidget {
           //Navigator.of(context).pushNamed();
         },
         color: Colors.lightBlueAccent,
-        padding: EdgeInsets.only(left: 140.0, right: 140.0, top: 15.0, bottom: 15.0),
+        padding: EdgeInsets.only(left: 130.0, right: 130.0, top: 15.0, bottom: 15.0),
         child: Text('Runda 4', style: TextStyle(color: Colors.white)),
       ),
     );
@@ -103,7 +103,7 @@ class MissionsPage extends StatelessWidget {
           //Navigator.of(context).pushNamed();
         },
         color: Colors.deepOrangeAccent,
-        padding: EdgeInsets.only(left: 120.0, right: 113.0, top: 15.0, bottom: 15.0),
+        padding: EdgeInsets.only(left: 100.0, right: 100.0, top: 15.0, bottom: 15.0),
         child: Text('Skapa nytt uppdrag', style: TextStyle(color: Colors.white)),
       ),
     );
@@ -118,7 +118,7 @@ class MissionsPage extends StatelessWidget {
           //Navigator.of(context).pushNamed();
         },
         color: Colors.red,
-        padding: EdgeInsets.only(left: 120.0, right: 57.0, top: 15.0, bottom: 15.0),
+        padding: EdgeInsets.only(left: 75.0, right: 75.0, top: 15.0, bottom: 15.0),
         child: Text('Alla mina avklarade uppdrag', style: TextStyle(color: Colors.white)),
       ),
     );
@@ -133,7 +133,7 @@ class MissionsPage extends StatelessWidget {
           //Navigator.of(context).pushNamed();
         },
         color: Colors.green,
-        padding: EdgeInsets.only(left: 120.0, right: 119.0, top: 15.0, bottom: 15.0),
+        padding: EdgeInsets.only(left: 107.0, right: 107.0, top: 15.0, bottom: 15.0),
         child: Text('Inte namngiven än', style: TextStyle(color: Colors.white)),
       ),
     );
