@@ -11,6 +11,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  String _email;
+  String _password;
+
   Widget _backButton() {
     return InkWell(
       onTap: () {
@@ -32,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _entryField(String title, {bool isPassword = false}) {
+  Widget _emailEntry(String title) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       child: Column(
@@ -46,11 +49,47 @@ class _LoginPageState extends State<LoginPage> {
             height: 10,
           ),
           TextField(
-              obscureText: isPassword,
+              onChanged: (value) {
+                setState(() {
+                  _email = value;
+                });
+              },
+              obscureText: false,
               decoration: InputDecoration(
                   border: InputBorder.none,
                   fillColor: Color(0xfff3f3f4),
                   filled: true))
+
+        ],
+      ),
+    );
+  }
+
+  Widget _passwordEntry(String title,) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            "title",
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          TextField(
+              onChanged: (value) {
+                setState(() {
+                  _password = value;
+                });
+              },
+              obscureText: true,
+              decoration: InputDecoration(
+                  border: InputBorder.none,
+                  fillColor: Color(0xfff3f3f4),
+                  filled: true))
+
         ],
       ),
     );
@@ -59,6 +98,8 @@ class _LoginPageState extends State<LoginPage> {
   Widget _submitButton() {
     return InkWell(
         onTap: () {
+          debugPrint('username: $_email');
+          debugPrint('password: $_password');
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => NavBar()));
         },
@@ -228,8 +269,8 @@ class _LoginPageState extends State<LoginPage> {
   Widget _emailPasswordWidget() {
     return Column(
       children: <Widget>[
-        _entryField("Username"),
-        _entryField("Password", isPassword: true),
+        _emailEntry("Username"),
+        _passwordEntry("Password"),
       ],
     );
   }
