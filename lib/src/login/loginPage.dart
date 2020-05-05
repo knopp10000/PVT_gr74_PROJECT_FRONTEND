@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:history_go/src/login/signupPage.dart';
 import 'package:history_go/src/navBar.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert' as JSON;
+
+
+
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key, this.title}) : super(key: key);
@@ -11,6 +17,11 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  bool _isLoggedIn = false;
+  Map userProfile;
+
+  final facebookLogin = FacebookLogin();
+
   String _email;
   String _password;
 
@@ -100,8 +111,7 @@ class _LoginPageState extends State<LoginPage> {
         onTap: () {
           debugPrint('username: $_email');
           debugPrint('password: $_password');
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => NavBar()));
+          _logInWithEmail();
         },
         child: Container(
           width: MediaQuery.of(context).size.width,
@@ -161,51 +171,67 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _facebookButton() {
-    return Container(
-      height: 50,
-      margin: EdgeInsets.symmetric(vertical: 20),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-      ),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            flex: 1,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Color(0xff1959a9),
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(5),
-                    topLeft: Radius.circular(5)),
-              ),
-              alignment: Alignment.center,
-              child: Text('f',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 25,
-                      fontWeight: FontWeight.w400)),
-            ),
+    return InkWell(
+        onTap: () {
+          debugPrint('username: fb');
+          _loginWithFB();
+        },
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          padding: EdgeInsets.symmetric(vertical: 15),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(5)),
+              boxShadow: <BoxShadow>[
+                BoxShadow(
+                    color: Colors.grey.shade200,
+                    offset: Offset(2, 4),
+                    blurRadius: 5,
+                    spreadRadius: 2)
+              ],
+              gradient: LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: [Color(0xF0255FFF), Color(0xF0777FFF)])),
+          child: Text(
+            'Login',
+            style: TextStyle(fontSize: 20, color: Colors.white),
           ),
-          Expanded(
-            flex: 5,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Color(0xff2872ba),
-                borderRadius: BorderRadius.only(
-                    bottomRight: Radius.circular(5),
-                    topRight: Radius.circular(5)),
-              ),
-              alignment: Alignment.center,
-              child: Text('Log in with Facebook',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w400)),
-            ),
-          ),
-        ],
-      ),
-    );
+        ));
+  }
+
+  _loginWithFB() async{
+    final result = await facebookLogin.logInWithReadPermissions(['email']);
+
+    switch (result.status) {
+      case FacebookLoginStatus.loggedIn:
+        final token = result.accessToken.token;
+        final graphResponse = await http.get('https://graph.facebook.com/v2.12/me?fields=name,picture,email&access_token=${token}');
+        final profile = JSON.jsonDecode(graphResponse.body);
+        print(profile);
+        setState(() {
+          userProfile = profile;
+          _isLoggedIn = true;
+        });
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => NavBar()));
+        break;
+
+      case FacebookLoginStatus.cancelledByUser:
+        setState(() => _isLoggedIn = false );
+        break;
+      case FacebookLoginStatus.error:
+        setState(() => _isLoggedIn = false );
+        break;
+    }
+
+  }
+
+  _logout(){
+    facebookLogin.logOut();
+    setState(() {
+      _isLoggedIn = false;
+    });
   }
 
   Widget _createAccountLabel() {
@@ -326,5 +352,16 @@ class _LoginPageState extends State<LoginPage> {
         ],
       ),
     )));
+  }
+
+  void _logInWithEmail() {
+    if(_email == "a" && _password == "a"){
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => NavBar()));
+    }else{
+      debugPrint('Email or password was wrong!');
+      debugPrint('username: $_email');
+      debugPrint('password: $_password');
+    }
   }
 }
