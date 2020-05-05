@@ -13,16 +13,21 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   Completer<GoogleMapController> _controller = Completer();
-
   Map<MarkerId, Marker> markers = <MarkerId, Marker> {};
   
   int _markerIdCounter = 1;
   MarkerId selectedMarker;
 
   static final CameraPosition _kStockholm = CameraPosition(
-    target: LatLng(59.3253159, 18.0398813),
+    target: LatLng(59.314323787178985, 18.085596598684788),
     zoom: 12,
   );
+
+  @override
+  void initState() {
+    super.initState();
+    setMarkers();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +36,6 @@ class _MapPageState extends State<MapPage> {
       initialCameraPosition: _kStockholm,
       onMapCreated: (GoogleMapController controller) {
         _controller.complete(controller);
-        addMarker(const LatLng(59.3253159, 18.0398813));
-        addMarker(const LatLng(59.327, 18.0398813));
       },
       markers: Set<Marker>.of(markers.values),
     );
@@ -66,14 +69,19 @@ class _MapPageState extends State<MapPage> {
     final Marker marker = Marker(
       markerId: markerId,
       position: pos,
-      infoWindow: InfoWindow(title: markerIdVal, snippet: '*'),
+      infoWindow: InfoWindow(title: markerIdVal),
+      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
       onTap: () {
         _onMarkerTapped(markerId);
       },
     );
 
-    setState(() {
-      markers[markerId] = marker;
-    });
+    markers[markerId] = marker;
+    
+  }
+
+  void setMarkers() {
+    addMarker(const LatLng(59.335, 18.1268));
+    addMarker(const LatLng(59.327, 18.0398813));
   }
 }
