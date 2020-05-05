@@ -16,7 +16,9 @@ class MissionsPage extends StatelessWidget {
       ),
     );
 
-    final runda1 = Padding(
+    final runda1 = Container(
+      width: 325.0,
+      height: 60.0,
       padding: EdgeInsets.symmetric(vertical: 6.0, horizontal: 6.0),
       child: RaisedButton(
         shape: RoundedRectangleBorder(
@@ -26,12 +28,13 @@ class MissionsPage extends StatelessWidget {
           //Navigator.of(context).pushNamed();
         },
         color: Colors.lightBlueAccent,
-        padding: EdgeInsets.only(left: 130.0, right: 130.0, top: 15.0, bottom: 15.0),
         child: Text('Runda 1', style: TextStyle(color: Colors.white)),
       ),
     );
 
-    final runda2 = Padding(
+    final runda2 = Container(
+      width: 325.0,
+      height: 60.0,
       padding: EdgeInsets.symmetric(vertical: 6.0, horizontal: 6.0),
       child: RaisedButton(
         shape: RoundedRectangleBorder(
@@ -41,12 +44,13 @@ class MissionsPage extends StatelessWidget {
           //Navigator.of(context).pushNamed();
         },
         color: Colors.lightBlueAccent,
-        padding: EdgeInsets.only(left: 130.0, right: 130.0, top: 15.0, bottom: 15.0),
         child: Text('Runda 2', style: TextStyle(color: Colors.white)),
       ),
     );
 
-    final runda3 = Padding(
+    final runda3 = Container(
+      width: 325.0,
+      height: 60.0,
       padding: EdgeInsets.symmetric(vertical: 6.0, horizontal: 6.0),
       child: RaisedButton(
         shape: RoundedRectangleBorder(
@@ -56,12 +60,13 @@ class MissionsPage extends StatelessWidget {
           //Navigator.of(context).pushNamed();
         },
         color: Colors.lightBlueAccent,
-        padding: EdgeInsets.only(left: 130.0, right: 130.0, top: 15.0, bottom: 15.0),
         child: Text('Runda 3', style: TextStyle(color: Colors.white)),
       ),
     );
 
-    final runda4 = Padding(
+    final runda4 = Container(
+      width: 325.0,
+      height: 60.0,
       padding: EdgeInsets.symmetric(vertical: 6.0, horizontal: 6.0),
       child: RaisedButton(
         shape: RoundedRectangleBorder(
@@ -71,7 +76,6 @@ class MissionsPage extends StatelessWidget {
           //Navigator.of(context).pushNamed();
         },
         color: Colors.lightBlueAccent,
-        padding: EdgeInsets.only(left: 130.0, right: 130.0, top: 15.0, bottom: 15.0),
         child: Text('Runda 4', style: TextStyle(color: Colors.white)),
       ),
     );
@@ -89,11 +93,13 @@ class MissionsPage extends StatelessWidget {
                 bottomRight: const  Radius.circular(40.0))
         ),
         child: Column(
-            children: <Widget>[text1, runda1, runda2, runda3, runda4],
+          children: <Widget>[text1, runda1, runda2, runda3, runda4],
         )
     );
 
-    final skapa = Padding(
+    final skapa = Container(
+      width: 330.0,
+      height: 60.0,
       padding: EdgeInsets.symmetric(vertical: 6.0),
       child: RaisedButton(
         shape: RoundedRectangleBorder(
@@ -108,7 +114,9 @@ class MissionsPage extends StatelessWidget {
       ),
     );
 
-    final avklarade = Padding(
+    final avklarade = Container(
+      width: 330.0,
+      height: 60.0,
       padding: EdgeInsets.symmetric(vertical: 6.0),
       child: RaisedButton(
         shape: RoundedRectangleBorder(
@@ -123,7 +131,9 @@ class MissionsPage extends StatelessWidget {
       ),
     );
 
-    final noName = Padding(
+    final noName = Container(
+      width: 330.0,
+      height: 60.0,
       padding: EdgeInsets.symmetric(vertical: 6.0),
       child: RaisedButton(
         shape: RoundedRectangleBorder(
