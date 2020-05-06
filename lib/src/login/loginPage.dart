@@ -1,12 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:history_go/src/login/signupPage.dart';
-import 'package:history_go/src/navBar.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert' as JSON;
 
-
-
+import 'package:flutter/material.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:http/http.dart' as http;
+import 'package:history_go/src/login/signupPage.dart';
+import 'package:history_go/src/navBar.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key, this.title}) : super(key: key);
@@ -24,6 +22,7 @@ class _LoginPageState extends State<LoginPage> {
 
   String _email;
   String _password;
+
 
   Widget _backButton() {
     return InkWell(
@@ -45,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-
+ 
   Widget _emailEntry(String title) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
@@ -70,20 +69,19 @@ class _LoginPageState extends State<LoginPage> {
                   border: InputBorder.none,
                   fillColor: Color(0xfff3f3f4),
                   filled: true))
-
         ],
       ),
     );
   }
 
-  Widget _passwordEntry(String title,) {
+  Widget _passwordEntry(String title) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            "title",
+            title,
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
           ),
           SizedBox(
@@ -100,7 +98,6 @@ class _LoginPageState extends State<LoginPage> {
                   border: InputBorder.none,
                   fillColor: Color(0xfff3f3f4),
                   filled: true))
-
         ],
       ),
     );
@@ -181,7 +178,9 @@ class _LoginPageState extends State<LoginPage> {
           padding: EdgeInsets.symmetric(vertical: 15),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(5)),
+              image: DecorationImage(
+                image: AssetImage('assets/fbBtn.png')
+              ),
               boxShadow: <BoxShadow>[
                 BoxShadow(
                     color: Colors.grey.shade200,
@@ -189,24 +188,22 @@ class _LoginPageState extends State<LoginPage> {
                     blurRadius: 5,
                     spreadRadius: 2)
               ],
-              gradient: LinearGradient(
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                  colors: [Color(0xF0255FFF), Color(0xF0777FFF)])),
+          ),
           child: Text(
-            'Login',
+            '',
             style: TextStyle(fontSize: 20, color: Colors.white),
           ),
         ));
   }
 
-  _loginWithFB() async{
+  _loginWithFB() async {
     final result = await facebookLogin.logInWithReadPermissions(['email']);
 
     switch (result.status) {
       case FacebookLoginStatus.loggedIn:
         final token = result.accessToken.token;
-        final graphResponse = await http.get('https://graph.facebook.com/v2.12/me?fields=name,picture,email&access_token=${token}');
+        final graphResponse = await http.get(
+            'https://graph.facebook.com/v2.12/me?fields=name,picture,email&access_token=${token}');
         final profile = JSON.jsonDecode(graphResponse.body);
         print(profile);
         setState(() {
@@ -218,16 +215,15 @@ class _LoginPageState extends State<LoginPage> {
         break;
 
       case FacebookLoginStatus.cancelledByUser:
-        setState(() => _isLoggedIn = false );
+        setState(() => _isLoggedIn = false);
         break;
       case FacebookLoginStatus.error:
-        setState(() => _isLoggedIn = false );
+        setState(() => _isLoggedIn = false);
         break;
     }
-
   }
 
-  _logout(){
+  _logout() {
     facebookLogin.logOut();
     setState(() {
       _isLoggedIn = false;
@@ -295,7 +291,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget _emailPasswordWidget() {
     return Column(
       children: <Widget>[
-        _emailEntry("Username"),
+        _emailEntry("Email"),
         _passwordEntry("Password"),
       ],
     );
@@ -355,10 +351,10 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _logInWithEmail() {
-    if(_email == "a" && _password == "a"){
+    if (_email == "a" && _password == "a") {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => NavBar()));
-    }else{
+    } else {
       debugPrint('Email or password was wrong!');
       debugPrint('username: $_email');
       debugPrint('password: $_password');
