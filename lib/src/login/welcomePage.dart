@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:history_go/src/login/loginPage.dart';
 import 'package:history_go/src/login/signupPage.dart';
 
+import 'dart:convert' as convert;
+import 'package:http/http.dart' as http;
+
+
 class WelcomePage extends StatefulWidget {
   WelcomePage({Key key, this.title}) : super(key: key);
   final String title;
@@ -42,6 +46,7 @@ class _WelcomePageState extends State<WelcomePage> {
   Widget _signUpButton() {
     return InkWell(
       onTap: () {
+        testBackend();
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => SignUpPage()));
       },
@@ -128,5 +133,19 @@ class _WelcomePageState extends State<WelcomePage> {
         ),
       ),
     );
+  }
+}
+
+Future<void> testBackend() async {
+  //var url = 'http://localhost:8080/getPlace?lats=59.321&lats=18.095';
+  var url = 'https://group4-75.pvt.dsv.su.se/getPlace?lats=59.321&lats=18.095';
+  var response = await http.get(url);
+  print('Response status: ${response.statusCode}');
+  if (response.statusCode == 200) {
+    Map<String, dynamic> jsonResponse = convert.jsonDecode(response.body);
+    print('Response body: ${response.body}');
+    print('\nJson body: ${jsonResponse["result"]["records"][1]["record"]["@graph"]}');
+  }else {
+    print('Request failed with status: ${response.statusCode}.');
   }
 }
