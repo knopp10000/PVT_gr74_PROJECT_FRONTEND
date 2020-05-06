@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'settingsPage.dart';
 
 class MapPage extends StatefulWidget {
   MapPage({Key key, this.title}) : super(key: key);
@@ -29,15 +30,46 @@ class _MapPageState extends State<MapPage> {
     setMarkers();
   }
 
+  Widget button(IconData icon) {
+    return FloatingActionButton(
+      onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsPage()));},
+      materialTapTargetSize: MaterialTapTargetSize.padded,
+      backgroundColor: Colors.blue,
+      child: Icon(
+        icon,
+        size: 36.0,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return GoogleMap(
-      mapType: MapType.normal,
-      initialCameraPosition: _kStockholm,
-      onMapCreated: (GoogleMapController controller) {
-        _controller.complete(controller);
-      },
-      markers: Set<Marker>.of(markers.values),
+    return MaterialApp(
+      home: Scaffold(
+        body: Stack(
+          children: <Widget>[
+            GoogleMap(
+              onMapCreated: (GoogleMapController controller) {
+                _controller.complete(controller);
+              },
+              initialCameraPosition: _kStockholm,
+              mapType: MapType.normal,
+              markers: Set<Marker>.of(markers.values),
+            ),
+            Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Align(
+                alignment: Alignment.topRight,
+                child: Column(
+                  children: <Widget>[
+                    button(Icons.settings),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
