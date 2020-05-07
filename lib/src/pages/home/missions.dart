@@ -3,15 +3,12 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class MissionsPage extends StatelessWidget {
-  final Color color;
-
-  MissionsPage(this.color);
-
+  
   Widget _missionButton(String title) {
     return Container(
-      width: 280.0,
-      height: 55.0,
-      margin: EdgeInsets.all(8.0),
+        width: 280.0,
+        height: 55.0,
+        margin: EdgeInsets.all(8.0),
         child: RaisedButton(
           padding: EdgeInsets.symmetric(horizontal: 28.0, vertical: 8.0),
           shape: RoundedRectangleBorder(

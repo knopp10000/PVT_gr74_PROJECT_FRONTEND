@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:history_go/src/login/loginPage.dart';
 
 class SignUpPage extends StatefulWidget {
   SignUpPage({Key key, this.title}) : super(key: key);
@@ -11,7 +10,6 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  
   Widget _backButton() {
     return InkWell(
       onTap: () {
@@ -98,8 +96,7 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
           InkWell(
             onTap: () {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => LoginPage()));
+              Navigator.pushReplacementNamed(context, '/login');
             },
             child: Text(
               'Login',
@@ -119,19 +116,22 @@ class _SignUpPageState extends State<SignUpPage> {
       textAlign: TextAlign.center,
       text: TextSpan(
           text: 'History ',
-          style: TextStyle(color: Colors.orange, 
-          fontSize: 40, 
-          fontWeight: FontWeight.w700
-          ),
+          style: TextStyle(
+              color: Colors.orange, fontSize: 40, fontWeight: FontWeight.w700),
           children: [
             TextSpan(
               text: 'Go',
-              style: TextStyle(color: Colors.black, fontSize: 40, fontWeight: FontWeight.w900
-              ),
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 40,
+                  fontWeight: FontWeight.w900),
             ),
             TextSpan(
               text: '!',
-              style: TextStyle(color: Colors.deepOrange, fontSize: 40, fontWeight: FontWeight.w900),
+              style: TextStyle(
+                  color: Colors.deepOrange,
+                  fontSize: 40,
+                  fontWeight: FontWeight.w900),
             ),
           ]),
     );
@@ -150,46 +150,44 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child:Container(
-          height: MediaQuery.of(context).size.height,
-          child:Stack(
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Expanded(
-                      flex: 3,
-                      child: SizedBox(),
-                    ),
-                    _title(),
-                    SizedBox(
-                      height: 50,
-                    ),
-                    _emailPasswordWidget(),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    _submitButton(),
-                    Expanded(
-                      flex: 2,
-                      child: SizedBox(),
-                    )
-                  ],
+        body: SingleChildScrollView(
+            child: Container(
+      height: MediaQuery.of(context).size.height,
+      child: Stack(
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Expanded(
+                  flex: 3,
+                  child: SizedBox(),
                 ),
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: _loginAccountLabel(),
-              ),
-              Positioned(top: 40, left: 0, child: _backButton()),
-            ],
+                _title(),
+                SizedBox(
+                  height: 50,
+                ),
+                _emailPasswordWidget(),
+                SizedBox(
+                  height: 20,
+                ),
+                _submitButton(),
+                Expanded(
+                  flex: 2,
+                  child: SizedBox(),
+                )
+              ],
+            ),
           ),
-        )
-      )
-    );
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: _loginAccountLabel(),
+          ),
+          Positioned(top: 40, left: 0, child: _backButton()),
+        ],
+      ),
+    )));
   }
 }

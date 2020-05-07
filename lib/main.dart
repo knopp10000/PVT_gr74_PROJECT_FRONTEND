@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:history_go/src/login/welcomePage.dart';
-//import 'package:google_map_location_picker/google_map_location_picker.dart';
-//import 'package:google_maps_flutter/google_maps_flutter.dart';
-//import 'package:dotenv/dotenv.dart' show load, env;
+import 'package:history_go/src/pages/pages.dart';
 
 
 void main() => runApp(MyApp());
@@ -16,7 +13,38 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
       ),
-      home: WelcomePage(),
+      initialRoute: '/welcome',
+      routes: {
+        '/welcome' : (context) => WelcomePage(),
+        '/login' : (context) => LoginPage(),
+        '/signup' : (context) => SignUpPage(),
+        '/home' : (context) => HomePage(),
+        '/map' : (context) => MapPage(),
+        '/info' : (context) => InfoPage(),
+        '/missions' : (context) => MissionsPage(),
+        '/permissions' : (context) => PermissionPage(),
+        '/profile' : (context) => ProfilePage(),
+        '/search' : (context) => SearchPage(),
+        '/settings' : (context) => SettingsPage(),
+      },
+      onUnknownRoute: (settings) => MaterialPageRoute(
+        builder: (context) => UndefinedView(
+          name: settings.name,
+        )),
+    );
+  }
+}
+
+class UndefinedView extends StatelessWidget {
+  final String name;
+  const UndefinedView({Key key, this.name}) : super(key: key);  
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Text('Route for $name is not defined'),
+      ),
     );
   }
 }

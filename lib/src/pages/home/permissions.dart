@@ -14,7 +14,7 @@ class _PermissionPageState extends State<PermissionPage> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Plugin example app'),
+          title: const Text('Behörigheter'),
           actions: <Widget>[
             IconButton(
               icon: const Icon(Icons.settings),

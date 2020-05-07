@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
 class SettingsPage extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
-
     final app = AppBar(
       backgroundColor: Colors.blue,
-      title: Text('Inställningar', style: TextStyle(fontSize: 26.0),),
-      actions: <Widget>[
-      ],
+      title: Text(
+        'Inställningar',
+        style: TextStyle(fontSize: 26.0),
+      ),
+      actions: <Widget>[],
     );
 
     final inst1 = Container(

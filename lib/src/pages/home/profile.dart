@@ -1,27 +1,24 @@
 import 'package:flutter/material.dart';
-import 'settingsPage.dart';
-
+import 'package:history_go/src/pages/pages.dart';
 
 class ProfilePage extends StatelessWidget {
-  final Color color;
-
-  ProfilePage(this.color);
-
+  
   @override
   Widget build(BuildContext context) {
-
     final app = AppBar(
       backgroundColor: Colors.blue,
-      title: Text('Profilnamn', style: TextStyle(fontSize: 26.0),),
-
+      title: Text(
+        'Profilnamn',
+        style: TextStyle(fontSize: 26.0),
+      ),
       actions: <Widget>[
         IconButton(
           icon: Icon(
             Icons.settings,
             color: Colors.white,
           ),
-          onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsPage()));
+          onPressed: () {
+            Navigator.pushNamed(context, '/settings');
           },
         )
       ],
@@ -114,4 +111,4 @@ class ProfilePage extends StatelessWidget {
       body: body,
     );
   }
-  }
+}

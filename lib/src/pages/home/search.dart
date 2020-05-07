@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:history_go/src/infoPage.dart';
-
-import 'perm.dart';
+import 'package:history_go/src/pages/pages.dart';
 
 class SearchPage extends StatelessWidget {
-  final Color color;
+  final Color color = Colors.green;
 
-  SearchPage(this.color);
 
   @override
   Widget build(BuildContext context) {
@@ -14,8 +11,8 @@ class SearchPage extends StatelessWidget {
       color: color,
       child: Center(
         child: FlatButton(
-          onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context) => PermissionPage()));
+          onPressed: () {
+            Navigator.pushNamed(context, '/info');
           },
           child: Text(
             'Kaknästornet',
@@ -23,7 +20,6 @@ class SearchPage extends StatelessWidget {
           ),
         ),
       ),
-
     );
   }
 }

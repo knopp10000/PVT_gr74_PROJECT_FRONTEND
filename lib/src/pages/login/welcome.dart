@@ -1,10 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:history_go/src/login/loginPage.dart';
-import 'package:history_go/src/login/signupPage.dart';
-
 import 'dart:convert' as convert;
-import 'package:http/http.dart' as http;
 
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class WelcomePage extends StatefulWidget {
   WelcomePage({Key key, this.title}) : super(key: key);
@@ -18,8 +15,7 @@ class _WelcomePageState extends State<WelcomePage> {
   Widget _loginButton() {
     return InkWell(
       onTap: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => LoginPage()));
+        Navigator.pushNamed(context, '/login');
       },
       child: Container(
         width: MediaQuery.of(context).size.width,
@@ -46,9 +42,8 @@ class _WelcomePageState extends State<WelcomePage> {
   Widget _signUpButton() {
     return InkWell(
       onTap: () {
-        testBackend();
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => SignUpPage()));
+        //testBackend();
+        Navigator.pushNamed(context, '/signup');
       },
       child: Container(
         width: MediaQuery.of(context).size.width,
@@ -144,8 +139,9 @@ Future<void> testBackend() async {
   if (response.statusCode == 200) {
     Map<String, dynamic> jsonResponse = convert.jsonDecode(response.body);
     print('Response body: ${response.body}');
-    print('\nJson body: ${jsonResponse["result"]["records"][1]["record"]["@graph"]}');
-  }else {
+    print(
+        '\nJson body: ${jsonResponse["result"]["records"][1]["record"]["@graph"]}');
+  } else {
     print('Request failed with status: ${response.statusCode}.');
   }
 }

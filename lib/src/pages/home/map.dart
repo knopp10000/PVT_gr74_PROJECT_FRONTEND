@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'settingsPage.dart';
+import 'package:history_go/src/pages/pages.dart';
 
 class MapPage extends StatefulWidget {
   MapPage({Key key, this.title}) : super(key: key);
@@ -14,8 +14,8 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   Completer<GoogleMapController> _controller = Completer();
-  Map<MarkerId, Marker> markers = <MarkerId, Marker> {};
-  
+  Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
+
   int _markerIdCounter = 1;
   MarkerId selectedMarker;
 
@@ -32,7 +32,10 @@ class _MapPageState extends State<MapPage> {
 
   Widget button(IconData icon) {
     return FloatingActionButton(
-      onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsPage()));},
+      onPressed: () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => SettingsPage()));
+      },
       materialTapTargetSize: MaterialTapTargetSize.padded,
       backgroundColor: Colors.blue,
       child: Icon(
@@ -109,7 +112,6 @@ class _MapPageState extends State<MapPage> {
     );
 
     markers[markerId] = marker;
-    
   }
 
   void setMarkers() {
