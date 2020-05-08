@@ -32,18 +32,23 @@
         
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAFturgQ7b_zG2MYBPNjUCRFfLG9wdpWSQ" />
+            android:value="AIzaSyDDeX8OAzFGg6RvZKbnakwPDNS_i6MgEKw"/>
 
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-        
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
         <meta-data android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
 
         <activity android:name="com.facebook.FacebookActivity"
-           android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-           android:label="@string/app_name" />
+            android:configChanges=
+                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name" />
         <activity
             android:name="com.facebook.CustomTabActivity"
             android:exported="true">
@@ -53,6 +58,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
-        </activity>   
+        </activity>
+        
     </application>
 </manifest>

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:history_go/src/pages/pages.dart';
 
+
 class ProfilePage extends StatelessWidget {
-  
-  @override
-  Widget build(BuildContext context) {
-    final app = AppBar(
+  final Color color;
+
+  ProfilePage(this.color);
+
+  Widget _appBar(String title) {
+    return AppBar(
       backgroundColor: Colors.blue,
-      title: Text(
-        'Profilnamn',
-        style: TextStyle(fontSize: 26.0),
-      ),
+      title: Text(title, style: TextStyle(fontSize: 26.0),),
       actions: <Widget>[
         IconButton(
           icon: Icon(
@@ -18,23 +18,38 @@ class ProfilePage extends StatelessWidget {
             color: Colors.white,
           ),
           onPressed: () {
-            Navigator.pushNamed(context, '/settings');
+            //Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsPage()));
           },
         )
       ],
     );
-/*
-    final text = Padding(
-      padding: EdgeInsets.all(8.0),
-      child: Text(
-        'Profilnamn',
-        style: TextStyle(fontSize: 30.0, color: Colors.white),
-      ),
+  }
 
+  Widget _profileButton(String title) {
+    return Container(
+      width: 330.0,
+      height: 60.0,
+      padding: EdgeInsets.symmetric(vertical: 6.0),
+      child: RaisedButton(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        onPressed: () {
+          //Navigator.of(context).pushNamed();
+        },
+        color: Colors.lightBlueAccent,
+        child: Text(
+          title,
+          style: TextStyle(color: Colors.white),
+          textAlign: TextAlign.center,
+        ),
+      ),
     );
-*/
-    final picture = Hero(
-      tag: 'hero',
+  }
+
+  Widget _profilePicture() {
+    return Hero(
+      tag: 'profilBild',
       child: Padding(
         padding: EdgeInsets.all(16.0),
         child: CircleAvatar(
@@ -44,71 +59,32 @@ class ProfilePage extends StatelessWidget {
         ),
       ),
     );
+  }
 
-    final vanner = Container(
-      width: 330.0,
-      height: 60.0,
-      padding: EdgeInsets.symmetric(vertical: 6.0),
-      child: RaisedButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24),
-        ),
-        onPressed: () {
-          //Navigator.of(context).pushNamed();
-        },
-        color: Colors.lightBlueAccent,
-        child: Text('Mina vänner', style: TextStyle(color: Colors.white)),
-      ),
-    );
-
-    final badges = Container(
-      width: 330.0,
-      height: 60.0,
-      padding: EdgeInsets.symmetric(vertical: 6.0),
-      child: RaisedButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24),
-        ),
-        onPressed: () {
-          //Navigator.of(context).pushNamed();
-        },
-        color: Colors.lightBlueAccent,
-        child: Text('Mina badges', style: TextStyle(color: Colors.white)),
-      ),
-    );
-
-    final bidrag = Container(
-      width: 330.0,
-      height: 60.0,
-      padding: EdgeInsets.symmetric(vertical: 6.0),
-      child: RaisedButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24),
-        ),
-        onPressed: () {
-          //Navigator.of(context).pushNamed();
-        },
-        color: Colors.lightBlueAccent,
-        child: Text('Mina bidrag', style: TextStyle(color: Colors.white)),
-      ),
-    );
-
-    final body = Container(
-      width: MediaQuery.of(context).size.width,
-      padding: EdgeInsets.all(28.0),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(colors: [
-          Colors.blue,
-          Colors.lightBlueAccent,
-        ]),
-      ),
-      child: Column(
-        children: <Widget>[app, picture, vanner, badges, bidrag],
-      ),
-    );
-
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      body: body,
+      body: Center(
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          padding: EdgeInsets.all(28.0),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(colors: [
+              Colors.blue,
+              Colors.lightBlueAccent,
+            ]),
+          ),
+          child: Column(
+            children: <Widget>[
+              _appBar('Profilnamn'),
+              _profilePicture(),
+              _profileButton('Mina vänner'),
+              _profileButton('Mina badges'),
+              _profileButton('Mina bidrag'),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
