@@ -179,15 +179,13 @@ class _MapPageState extends State<MapPage> {
 
         double lat = double.parse(obj["lat"]);
         double lon = double.parse(obj["lon"]);
+        String title = obj["title"];
         String desc = obj["desc"];
         String urlString = obj["img"];
         Image img = new Image.network(urlString);
 
-        places.add(new Place(new LatLng(lat, lon), "test", img, desc));
+        places.add(new Place(new LatLng(lat, lon), title, img, desc));
       }
-
-
-
     } else {
       print('Request failed with status: ${response.statusCode}.');
     }

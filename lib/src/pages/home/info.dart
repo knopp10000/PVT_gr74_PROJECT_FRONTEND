@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 
+import 'map.dart';
+
 class InfoPage extends StatelessWidget {
 
   Widget _appBar(String title) {
@@ -44,26 +46,55 @@ class InfoPage extends StatelessWidget {
 
     @override
     Widget build(BuildContext context) {
-      return Scaffold(
-        body: Center(
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.all(28.0),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(colors: [
-                Colors.blue,
-                Colors.lightBlueAccent,
-              ]),
-            ),
-            child: Column(
-              children: <Widget>[
-                _appBar('Kaknästornet'),
-                _infoPicture(),
-                _infoText(),
-              ],
+      Place place;
+
+      RouteSettings settings = ModalRoute.of(context).settings;
+      place = settings.arguments;
+
+      if(place != null){
+        return Scaffold(
+          body: Center(
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              padding: EdgeInsets.all(28.0),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(colors: [
+                  Colors.blue,
+                  Colors.lightBlueAccent,
+                ]),
+              ),
+              child: Column(
+                children: <Widget>[
+                  _appBar('${place.name}'),
+                  _infoPicture(),
+                  _infoText(),
+                ],
+              ),
             ),
           ),
-        ),
-      );
+        );
+      }else{
+        return Scaffold(
+          body: Center(
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              padding: EdgeInsets.all(28.0),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(colors: [
+                  Colors.blue,
+                  Colors.lightBlueAccent,
+                ]),
+              ),
+              child: Column(
+                children: <Widget>[
+                  _appBar('Ingen plats'),
+                  _infoPicture(),
+                  _infoText(),
+                ],
+              ),
+            ),
+          ),
+        );
+      }
     }
   }
