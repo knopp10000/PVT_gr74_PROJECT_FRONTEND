@@ -149,7 +149,6 @@ class _MapPageState extends State<MapPage> {
         String urlString = obj["img"];
         Image img = new Image.network(urlString);
 
-<<<<<<< HEAD
         places.add(new Place(new LatLng(lat, lon), "test", img, desc));
         places.add(new Place(
         LatLng(59.327, 18.0398813),
@@ -159,10 +158,6 @@ class _MapPageState extends State<MapPage> {
         'beskrivning blabla'));
       }
       });
-=======
-        places.add(new Place(new LatLng(lat, lon), title, img, desc));
-      }
->>>>>>> eb9835bc18f18fa85a62b4ca1e0bb6ec8237e3f8
     } else {
       print('Request failed with status: ${response.statusCode}.');
     }
