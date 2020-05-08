@@ -18,6 +18,7 @@ class _MapPageState extends State<MapPage> {
   Completer<GoogleMapController> _controller = Completer();
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
 
+  List<Place> places = new List<Place>();
   int _markerIdCounter = 1;
   MarkerId selectedMarker;
 
@@ -30,7 +31,6 @@ class _MapPageState extends State<MapPage> {
   void initState() {
     super.initState();
     getPlaces();
-    setMarkers();
   }
 
   Widget button(IconData icon) {
@@ -79,27 +79,7 @@ class _MapPageState extends State<MapPage> {
     );
   }
 
-  void _onMarkerTapped(MarkerId markerId) {
-    final Marker tappedMarker = markers[markerId];
-    if (tappedMarker != null) {
-      setState(() {
-        if (markers.containsKey(selectedMarker)) {
-          final Marker resetOld = markers[selectedMarker]
-              .copyWith(iconParam: BitmapDescriptor.defaultMarker);
-          markers[selectedMarker] = resetOld;
-        }
-        selectedMarker = markerId;
-        final Marker newMarker = tappedMarker.copyWith(
-          iconParam: BitmapDescriptor.defaultMarkerWithHue(
-            BitmapDescriptor.hueGreen,
-          ),
-        );
-        markers[markerId] = newMarker;
-      });
-    }
-  }
-
-  void _onPlaceMarkerTapped(MarkerId markerId, Place place) {
+  void _onMarkerTapped(MarkerId markerId, Place place) {
     final Marker tappedMarker = markers[markerId];
     if (tappedMarker != null) {
       setState(() {
@@ -119,47 +99,34 @@ class _MapPageState extends State<MapPage> {
     }
   }
 
-  void addPlaceMarker(Place place) {
+  void addMarker(Place place) {
     final String markerIdVal = 'marker_id_$_markerIdCounter';
     _markerIdCounter++;
     final MarkerId markerId = MarkerId(markerIdVal);
 
     final Marker marker = Marker(
-      markerId: markerId,
-      position: place.position,
-      infoWindow: InfoWindow(title: place.description ?? 'saknar beskrivning'),
-      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueYellow),
-      onTap: () {
-        _onPlaceMarkerTapped(markerId, place);
-      }
-    );
-
-    markers[markerId] = marker;
-  }
-
-  void addMarker(LatLng pos) {
-    final String markerIdVal = 'marker_id_$_markerIdCounter';
-    _markerIdCounter++;
-    final MarkerId markerId = MarkerId(markerIdVal);
-
-    final Marker marker = Marker(
-      markerId: markerId,
-      position: pos,
-      infoWindow: InfoWindow(title: markerIdVal),
-      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-      onTap: () {
-        _onMarkerTapped(markerId);
-      },
-    );
-
-    markers[markerId] = marker;
+        markerId: markerId,
+        position: place.position,
+        infoWindow: InfoWindow(
+          title: place.name,
+          snippet: place.description ?? 'saknar beskrivning',
+          onTap: () => Navigator.pushNamed(context, "/info", arguments: place)
+        ),
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueYellow),
+        onTap: () {
+          _onMarkerTapped(markerId, place);
+        });
+    setState(() {
+      markers[markerId] = marker;
+    });
   }
 
   void setMarkers() {
-    addMarker(const LatLng(59.335, 18.1268));
+    for (Place p in places) {
+      addMarker(p);
+      debugPrint(p.toString());
+    }
     //addMarker(const LatLng(59.327, 18.0398813));
-    addPlaceMarker(new Place(LatLng(59.327, 18.0398813), 'place test 1', Image.network(
-      'http://kmb.raa.se/cocoon/bild/raa-image/16001000018011/normal/1.jpg'), 'beskrivning blabla'));
   }
 
   void getPlaces() async {
@@ -172,11 +139,9 @@ class _MapPageState extends State<MapPage> {
       //print('Response body: ${response.body}');
       debugPrint('\nJson body: ${jsonResponse[0]["desc"]}');
 
-      List<Place> places = new List<Place>();
-
       print(jsonResponse.length);
-      for(var obj in jsonResponse){
-
+      setState(() {
+      for (var obj in jsonResponse) {
         double lat = double.parse(obj["lat"]);
         double lon = double.parse(obj["lon"]);
         String desc = obj["desc"];
@@ -184,13 +149,18 @@ class _MapPageState extends State<MapPage> {
         Image img = new Image.network(urlString);
 
         places.add(new Place(new LatLng(lat, lon), "test", img, desc));
+        places.add(new Place(
+        LatLng(59.327, 18.0398813),
+        'place test 1',
+        Image.network(
+            'http://kmb.raa.se/cocoon/bild/raa-image/16001000018011/normal/1.jpg'),
+        'beskrivning blabla'));
       }
-
-
-
+      });
     } else {
       print('Request failed with status: ${response.statusCode}.');
     }
+    setMarkers();
     return;
   }
 }
@@ -203,4 +173,14 @@ class Place {
 
   Place(this.position, this.name, this.img, this.description);
 
+  @override
+  String toString() {
+    return "name: " +
+            name +
+            " position:" +
+            position.toString() +
+            "description: " +
+            description ??
+        "no description.";
+  }
 }
