@@ -29,8 +29,8 @@ class _MapPageState extends State<MapPage> {
   @override
   void initState() {
     super.initState();
-    getPlaces();
-    setMarkers();
+    //getPlaces();
+    //setMarkers();
   }
 
   Widget button(IconData icon) {
@@ -123,17 +123,18 @@ class _MapPageState extends State<MapPage> {
   }
 
   void getPlaces() async {
-    //var url = 'http://localhost:8080/getPlace?lats=59.321&lats=18.095';
-    var url = 'https://group4-75.pvt.dsv.su.se/getPlace?lats=59.321&lats=18.095';
+    //var url = 'http://localhost:8080/getPlaces?lat=59.321&lon=18.095';
+    var url = 'https://group4-75.pvt.dsv.su.se/getPlaces?lat=59.321&lon=18.095';
     var response = await http.get(url);
     print('Response status: ${response.statusCode}');
     if (response.statusCode == 200) {
-      Map<String, dynamic> jsonResponse = convert.jsonDecode(response.body);
+      List<dynamic> jsonResponse = convert.jsonDecode(response.body);
       print('Response body: ${response.body}');
       print(
-          '\nJson body: ${jsonResponse["result"]["records"][1]["record"]["@graph"]}');
+          '\nJson body: ${jsonResponse}');
     } else {
       print('Request failed with status: ${response.statusCode}.');
     }
+    return;
   }
 }
