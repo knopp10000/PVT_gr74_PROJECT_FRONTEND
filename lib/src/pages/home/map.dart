@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:convert' as convert;
 
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:history_go/src/pages/pages.dart';
@@ -27,6 +29,7 @@ class _MapPageState extends State<MapPage> {
   @override
   void initState() {
     super.initState();
+    getPlaces();
     setMarkers();
   }
 
@@ -117,5 +120,20 @@ class _MapPageState extends State<MapPage> {
   void setMarkers() {
     addMarker(const LatLng(59.335, 18.1268));
     addMarker(const LatLng(59.327, 18.0398813));
+  }
+
+  void getPlaces() async {
+    //var url = 'http://localhost:8080/getPlace?lats=59.321&lats=18.095';
+    var url = 'https://group4-75.pvt.dsv.su.se/getPlace?lats=59.321&lats=18.095';
+    var response = await http.get(url);
+    print('Response status: ${response.statusCode}');
+    if (response.statusCode == 200) {
+      Map<String, dynamic> jsonResponse = convert.jsonDecode(response.body);
+      print('Response body: ${response.body}');
+      print(
+          '\nJson body: ${jsonResponse["result"]["records"][1]["record"]["@graph"]}');
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+    }
   }
 }
