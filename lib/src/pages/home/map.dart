@@ -29,8 +29,8 @@ class _MapPageState extends State<MapPage> {
   @override
   void initState() {
     super.initState();
-    //getPlaces();
-    //setMarkers();
+    getPlaces();
+    setMarkers();
   }
 
   Widget button(IconData icon) {
@@ -129,12 +129,38 @@ class _MapPageState extends State<MapPage> {
     print('Response status: ${response.statusCode}');
     if (response.statusCode == 200) {
       List<dynamic> jsonResponse = convert.jsonDecode(response.body);
-      print('Response body: ${response.body}');
-      print(
-          '\nJson body: ${jsonResponse}');
+      //print('Response body: ${response.body}');
+      debugPrint('\nJson body: ${jsonResponse[0]["desc"]}');
+
+      List<Place> places = new List<Place>();
+
+      print(jsonResponse.length);
+      for(var obj in jsonResponse){
+
+        double lat = double.parse(obj["lat"]);
+        double lon = double.parse(obj["lon"]);
+        String desc = obj["desc"];
+        String urlString = obj["img"];
+        Image img = new Image.network(urlString);
+
+        places.add(new Place(new LatLng(lat, lon), "test", img, desc));
+      }
+
+
+
     } else {
       print('Request failed with status: ${response.statusCode}.');
     }
     return;
   }
+}
+
+class Place {
+  LatLng position;
+  String name;
+  Image img;
+  String description;
+
+  Place(this.position, this.name, this.img, this.description);
+
 }
