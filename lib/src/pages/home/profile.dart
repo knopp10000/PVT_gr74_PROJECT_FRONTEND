@@ -3,9 +3,6 @@ import 'package:history_go/src/pages/pages.dart';
 
 
 class ProfilePage extends StatelessWidget {
-  final Color color;
-
-  ProfilePage(this.color);
 
   Widget _appBar(String title) {
     return AppBar(
