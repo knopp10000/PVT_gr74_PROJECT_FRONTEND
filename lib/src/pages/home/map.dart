@@ -29,8 +29,8 @@ class _MapPageState extends State<MapPage> {
   @override
   void initState() {
     super.initState();
-    //getPlaces();
-    //setMarkers();
+    getPlaces();
+    setMarkers();
   }
 
   Widget button(IconData icon) {
@@ -99,6 +99,44 @@ class _MapPageState extends State<MapPage> {
     }
   }
 
+  void _onPlaceMarkerTapped(MarkerId markerId, Place place) {
+    final Marker tappedMarker = markers[markerId];
+    if (tappedMarker != null) {
+      setState(() {
+        if (markers.containsKey(selectedMarker)) {
+          final Marker resetOld = markers[selectedMarker]
+              .copyWith(iconParam: BitmapDescriptor.defaultMarker);
+          markers[selectedMarker] = resetOld;
+        }
+        selectedMarker = markerId;
+        final Marker newMarker = tappedMarker.copyWith(
+          iconParam: BitmapDescriptor.defaultMarkerWithHue(
+            BitmapDescriptor.hueMagenta,
+          ),
+        );
+        markers[markerId] = newMarker;
+      });
+    }
+  }
+
+  void addPlaceMarker(Place place) {
+    final String markerIdVal = 'marker_id_$_markerIdCounter';
+    _markerIdCounter++;
+    final MarkerId markerId = MarkerId(markerIdVal);
+
+    final Marker marker = Marker(
+      markerId: markerId,
+      position: place.position,
+      infoWindow: InfoWindow(title: place.description ?? 'saknar beskrivning'),
+      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueYellow),
+      onTap: () {
+        _onPlaceMarkerTapped(markerId, place);
+      }
+    );
+
+    markers[markerId] = marker;
+  }
+
   void addMarker(LatLng pos) {
     final String markerIdVal = 'marker_id_$_markerIdCounter';
     _markerIdCounter++;
@@ -119,7 +157,9 @@ class _MapPageState extends State<MapPage> {
 
   void setMarkers() {
     addMarker(const LatLng(59.335, 18.1268));
-    addMarker(const LatLng(59.327, 18.0398813));
+    //addMarker(const LatLng(59.327, 18.0398813));
+    addPlaceMarker(new Place(LatLng(59.327, 18.0398813), 'place test 1', Image.network(
+      'http://kmb.raa.se/cocoon/bild/raa-image/16001000018011/normal/1.jpg'), 'beskrivning blabla'));
   }
 
   void getPlaces() async {
@@ -137,4 +177,13 @@ class _MapPageState extends State<MapPage> {
     }
     return;
   }
+}
+
+class Place {
+  LatLng position;
+  String name;
+  Image img;
+  String description;
+
+  Place(this.position, this.name, this.img, [this.description]);
 }
