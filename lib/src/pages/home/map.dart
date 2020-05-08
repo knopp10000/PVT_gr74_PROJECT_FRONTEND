@@ -4,6 +4,7 @@ import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:history_go/src/pages/pages.dart';
 
 class MapPage extends StatefulWidget {
@@ -21,6 +22,10 @@ class _MapPageState extends State<MapPage> {
   List<Place> places = new List<Place>();
   int _markerIdCounter = 1;
   MarkerId selectedMarker;
+
+  Position _currentPosition;
+  CameraPosition _thisLocation;
+  bool foundPosition = false;
 
   static final CameraPosition _kStockholm = CameraPosition(
     target: LatLng(59.314323787178985, 18.085596598684788),
@@ -50,6 +55,13 @@ class _MapPageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
+    /*if (foundPosition == false) {
+        _getCurrentLocation();
+        if (_currentPosition != null) {
+          _goToPosition();
+          foundPosition = true;
+        }
+      } */
     return MaterialApp(
       home: Scaffold(
         body: Stack(
@@ -61,6 +73,8 @@ class _MapPageState extends State<MapPage> {
               initialCameraPosition: _kStockholm,
               mapType: MapType.normal,
               markers: Set<Marker>.of(markers.values),
+              //myLocationButtonEnabled: true,
+              //myLocationEnabled: true,
             ),
             Padding(
               padding: EdgeInsets.all(16.0),
@@ -85,13 +99,13 @@ class _MapPageState extends State<MapPage> {
       setState(() {
         if (markers.containsKey(selectedMarker)) {
           final Marker resetOld = markers[selectedMarker]
-              .copyWith(iconParam: BitmapDescriptor.defaultMarker);
+              .copyWith(iconParam: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen));
           markers[selectedMarker] = resetOld;
         }
         selectedMarker = markerId;
         final Marker newMarker = tappedMarker.copyWith(
           iconParam: BitmapDescriptor.defaultMarkerWithHue(
-            BitmapDescriptor.hueMagenta,
+            BitmapDescriptor.hueYellow,
           ),
         );
         markers[markerId] = newMarker;
@@ -108,11 +122,11 @@ class _MapPageState extends State<MapPage> {
         markerId: markerId,
         position: place.position,
         infoWindow: InfoWindow(
-          title: place.name,
-          snippet: place.description ?? 'saknar beskrivning',
-          onTap: () => Navigator.pushNamed(context, "/info", arguments: place)
-        ),
-        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueYellow),
+            title: place.name,
+            snippet: place.description ?? 'saknar beskrivning',
+            onTap: () =>
+                Navigator.pushNamed(context, "/info", arguments: place)),
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
         onTap: () {
           _onMarkerTapped(markerId, place);
         });
@@ -126,7 +140,6 @@ class _MapPageState extends State<MapPage> {
       addMarker(p);
       debugPrint(p.toString());
     }
-    //addMarker(const LatLng(59.327, 18.0398813));
   }
 
   void getPlaces() async {
@@ -136,27 +149,26 @@ class _MapPageState extends State<MapPage> {
     print('Response status: ${response.statusCode}');
     if (response.statusCode == 200) {
       List<dynamic> jsonResponse = convert.jsonDecode(response.body);
-      //print('Response body: ${response.body}');
       debugPrint('\nJson body: ${jsonResponse[0]["desc"]}');
 
       print(jsonResponse.length);
       setState(() {
-      for (var obj in jsonResponse) {
-        double lat = double.parse(obj["lat"]);
-        double lon = double.parse(obj["lon"]);
-        String title = obj["title"];
-        String desc = obj["desc"];
-        String urlString = obj["img"];
-        Image img = new Image.network(urlString);
+        for (var obj in jsonResponse) {
+          double lat = double.parse(obj["lat"]);
+          double lon = double.parse(obj["lon"]);
+          String title = obj["title"];
+          String desc = obj["desc"];
+          String urlString = obj["img"];
+          Image img = new Image.network(urlString);
 
-        places.add(new Place(new LatLng(lat, lon), "test", img, desc));
-        places.add(new Place(
-        LatLng(59.327, 18.0398813),
-        'place test 1',
-        Image.network(
-            'http://kmb.raa.se/cocoon/bild/raa-image/16001000018011/normal/1.jpg'),
-        'beskrivning blabla'));
-      }
+          places.add(new Place(new LatLng(lat, lon), "test", img, desc));
+          places.add(new Place(
+              LatLng(59.327, 18.0398813),
+              'place test 1',
+              Image.network(
+                  'http://kmb.raa.se/cocoon/bild/raa-image/16001000018011/normal/1.jpg'),
+              'beskrivning blabla'));
+        }
       });
     } else {
       print('Request failed with status: ${response.statusCode}.');
@@ -164,6 +176,27 @@ class _MapPageState extends State<MapPage> {
     setMarkers();
     return;
   }
+
+  /*_getCurrentLocation() {
+    final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+
+    geolocator.getCurrentPosition().then((Position position) {
+      setState(() {
+        _currentPosition = position;
+        _thisLocation = CameraPosition(
+          target: LatLng(_currentPosition.latitude, _currentPosition.longitude),
+          zoom: 12,
+        );
+      });
+    }).catchError((e) {
+      print(e);
+    });
+  }
+
+  Future<void> _goToPosition() async {
+    final GoogleMapController controller = await _controller.future;
+    controller.moveCamera(CameraUpdate.newCameraPosition(_thisLocation));
+  }*/
 }
 
 class Place {

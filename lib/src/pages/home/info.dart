@@ -3,6 +3,7 @@ import 'package:carousel_pro/carousel_pro.dart';
 import 'package:history_go/src/pages/pages.dart';
 
 class InfoPage extends StatelessWidget {
+  Place place;
 
   Widget _appBar(String title) {
     return AppBar(
@@ -23,11 +24,7 @@ class InfoPage extends StatelessWidget {
               autoplay: false,
               animationCurve: Curves.fastOutSlowIn,
               animationDuration: Duration(milliseconds: 2000),
-              images: [
-                ExactAssetImage("assets/kaknas.jpg"),
-                ExactAssetImage("assets/kaknas2.jpg"),
-                ExactAssetImage("assets/kaknas3.jpg")
-              ],
+              images: [place.img],
             )
         ),
       );
@@ -36,8 +33,7 @@ class InfoPage extends StatelessWidget {
     Widget _infoText() {
       return Padding(
         padding: EdgeInsets.all(8.0),
-        child: Text(
-          'Kaknästornet är ett torn på Ladugårdsgärdet i Stockholm och är centrum i radio- och TV-nätet för Teracoms radio- och TV-trafik i Sverige. Namnet kommer från Kaknäs, en av fyra kungsgårdar som låg här. Tornet har en höjd av 155 meter (170 meter inklusive masten) och 34 våningar.',
+        child: Text( place.description,
           style: TextStyle(fontSize: 16.0, color: Colors.white),
         ),
       );
@@ -45,7 +41,6 @@ class InfoPage extends StatelessWidget {
 
     @override
     Widget build(BuildContext context) {
-      Place place;
 
       RouteSettings settings = ModalRoute.of(context).settings;
       place = settings.arguments;
