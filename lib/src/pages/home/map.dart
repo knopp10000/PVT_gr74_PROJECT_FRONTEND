@@ -28,8 +28,8 @@ class _MapPageState extends State<MapPage> {
   bool foundPosition = false;
 
   static final CameraPosition _kStockholm = CameraPosition(
-    target: LatLng(59.314323787178985, 18.085596598684788),
-    zoom: 12,
+    target: LatLng(59.329, 18.068),
+    zoom: 16,
   );
 
   @override
@@ -138,17 +138,16 @@ class _MapPageState extends State<MapPage> {
   void setMarkers() {
     for (Place p in places) {
       addMarker(p);
-      debugPrint(p.toString());
     }
   }
 
   void getPlaces() async {
     //var url = 'http://localhost:8080/getPlaces?lat=59.321&lon=18.095';
-    var url = 'https://group4-75.pvt.dsv.su.se/getPlaces?lat=59.321&lon=18.095';
+    var url = 'https://group4-75.pvt.dsv.su.se/getPlaces?lat=59.329&lon=18.068';
     var response = await http.get(url);
     print('Response status: ${response.statusCode}');
     if (response.statusCode == 200) {
-      List<dynamic> jsonResponse = convert.jsonDecode(response.body);
+      List<dynamic> jsonResponse = convert.jsonDecode(convert.utf8.decode(response.bodyBytes));
       debugPrint('\nJson body: ${jsonResponse[0]["desc"]}');
 
       print(jsonResponse.length);
@@ -161,13 +160,7 @@ class _MapPageState extends State<MapPage> {
           String urlString = obj["img"];
           Image img = new Image.network(urlString);
 
-          places.add(new Place(new LatLng(lat, lon), "test", img, desc));
-          places.add(new Place(
-              LatLng(59.327, 18.0398813),
-              'place test 1',
-              Image.network(
-                  'http://kmb.raa.se/cocoon/bild/raa-image/16001000018011/normal/1.jpg'),
-              'beskrivning blabla'));
+          places.add(new Place(new LatLng(lat, lon), title, img, desc));
         }
       });
     } else {
