@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:history_go/src/widgets/title_logo.dart';
 
 class WelcomePage extends StatefulWidget {
   WelcomePage({Key key, this.title}) : super(key: key);
@@ -110,7 +111,7 @@ class _WelcomePageState extends State<WelcomePage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              _title(),
+              TitleLogo(),
               SizedBox(
                 height: 100,
               ),

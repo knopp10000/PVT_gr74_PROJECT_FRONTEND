@@ -2,6 +2,7 @@ import 'dart:convert' as JSON;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:history_go/src/widgets/title_logo.dart';
 import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
@@ -255,32 +256,6 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _title() {
-    return RichText(
-      textAlign: TextAlign.center,
-      text: TextSpan(
-          text: 'History ',
-          style: TextStyle(
-              color: Colors.orange, fontSize: 40, fontWeight: FontWeight.w700),
-          children: [
-            TextSpan(
-              text: 'Go',
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 40,
-                  fontWeight: FontWeight.w900),
-            ),
-            TextSpan(
-              text: '!',
-              style: TextStyle(
-                  color: Colors.deepOrange,
-                  fontSize: 40,
-                  fontWeight: FontWeight.w900),
-            ),
-          ]),
-    );
-  }
-
   Widget _emailPasswordWidget() {
     return Column(
       children: <Widget>[
@@ -308,7 +283,7 @@ class _LoginPageState extends State<LoginPage> {
                   flex: 3,
                   child: SizedBox(),
                 ),
-                _title(),
+                TitleLogo(),
                 SizedBox(
                   height: 50,
                 ),

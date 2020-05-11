@@ -25,19 +25,19 @@ class _HomePageState extends State<HomePage> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.map),
-            title: Text('Map'),
+            title: Text('KARTA'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.local_play),
-            title: Text('Missions'),
+            title: Text('UPPDRAG'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            title: Text('Profile'),
+            title: Text('PROFIL'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.search),
-            title: Text('Search'),
+            title: Text('SÖK'),
           ),
         ],
         currentIndex: _currentTab,

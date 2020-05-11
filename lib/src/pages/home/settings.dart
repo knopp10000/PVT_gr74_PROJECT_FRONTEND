@@ -32,6 +32,7 @@ class SettingsPage extends StatelessWidget {
     @override
     Widget build(BuildContext context) {
       return Scaffold(
+        appBar: _appBar('Inställningar'),
         body: Center(
           child: Container(
             width: MediaQuery.of(context).size.width,
@@ -44,7 +45,6 @@ class SettingsPage extends StatelessWidget {
             ),
             child: Column(
               children: <Widget>[
-                _appBar('Inställningar'),
                 _settingsButton('Aviseringar'),
                 _settingsButton('Konto'),
                 _settingsButton('Sekretess'),

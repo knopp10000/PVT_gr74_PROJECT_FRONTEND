@@ -1,26 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:history_go/src/pages/pages.dart';
-
 
 class ProfilePage extends StatelessWidget {
-
-  Widget _appBar(String title) {
-    return AppBar(
-      backgroundColor: Colors.blue,
-      title: Text(title, style: TextStyle(fontSize: 26.0),),
-      actions: <Widget>[
-        IconButton(
-          icon: Icon(
-            Icons.settings,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            //Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsPage()));
-          },
-        )
-      ],
-    );
-  }
 
   Widget _profileButton(String title) {
     return Container(
@@ -61,6 +41,25 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.blue,
+        centerTitle: true,
+        title: Text(
+          'Profil',
+          style: TextStyle(fontSize: 26.0, letterSpacing: 0.8),
+        ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.settings,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.pushNamed(context, '/settings');
+            },
+          )
+        ],
+      ),
       body: Center(
         child: Container(
           width: MediaQuery.of(context).size.width,
@@ -73,7 +72,6 @@ class ProfilePage extends StatelessWidget {
           ),
           child: Column(
             children: <Widget>[
-              _appBar('Profilnamn'),
               _profilePicture(),
               _profileButton('Mina vänner'),
               _profileButton('Mina badges'),
