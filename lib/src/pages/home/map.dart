@@ -23,11 +23,9 @@ class _MapPageState extends State<MapPage> {
   int _markerIdCounter = 1;
   MarkerId selectedMarker;
 
-  Position _currentPosition;
-  CameraPosition _thisLocation;
-  bool foundPosition = false;
+  static LatLng _initPosition;
 
-  static final CameraPosition _kStockholm = CameraPosition(
+  static const CameraPosition _gurras_torg = CameraPosition(
     target: LatLng(59.329, 18.068),
     zoom: 16,
   );
@@ -35,61 +33,95 @@ class _MapPageState extends State<MapPage> {
   @override
   void initState() {
     super.initState();
+    _getUserPosition();
     getPlaces();
   }
 
-  Widget button(IconData icon) {
-    return FloatingActionButton(
-      onPressed: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => SettingsPage()));
-      },
-      materialTapTargetSize: MaterialTapTargetSize.padded,
-      backgroundColor: Colors.blue,
-      child: Icon(
-        icon,
-        size: 36.0,
+  void _getUserPosition() async {
+    Position position = await Geolocator().getCurrentPosition();
+    List<Placemark> placemark =
+        await Geolocator().placemarkFromPosition(position);
+    setState(() {
+      _initPosition = LatLng(position.latitude, position.longitude);
+      print('${placemark[0].name}');
+    });
+  }
+
+  Widget _settingsButton() {
+    return Container(
+      height: 32,
+      width: 32,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey,
+            offset: Offset(2, 2),
+            blurRadius: 2,
+            spreadRadius: 1,
+          )
+        ],
+      ),
+      child: IconButton(
+        onPressed: () {
+          Navigator.pushNamed(context, "/settings");
+        },
+        padding: EdgeInsets.zero,
+        icon: Icon(
+          Icons.settings,
+          color: Colors.grey[800],
+        ),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    /*if (foundPosition == false) {
-        _getCurrentLocation();
-        if (_currentPosition != null) {
-          _goToPosition();
-          foundPosition = true;
-        }
-      } */
-    return MaterialApp(
-      home: Scaffold(
-        body: Stack(
-          children: <Widget>[
-            GoogleMap(
-              onMapCreated: (GoogleMapController controller) {
-                _controller.complete(controller);
-              },
-              initialCameraPosition: _kStockholm,
-              mapType: MapType.normal,
-              markers: Set<Marker>.of(markers.values),
-              //myLocationButtonEnabled: true,
-              //myLocationEnabled: true,
-            ),
-            Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Align(
-                alignment: Alignment.topRight,
-                child: Column(
-                  children: <Widget>[
-                    button(Icons.settings),
-                  ],
+    return Scaffold(
+      body: _initPosition == null
+          ? Container(
+              child: Center(
+                child: Text(
+                  'loading map..',
+                  style: TextStyle(
+                      fontFamily: 'Avenir-Medium', color: Colors.grey[400]),
                 ),
               ),
+            )
+          : Container(
+              child: Stack(
+                children: <Widget>[
+                  GoogleMap(
+                    onMapCreated: (GoogleMapController controller) {
+                      setState(() {
+                        _controller.complete(controller);
+                      });
+                    },
+                    initialCameraPosition: CameraPosition(
+                      target: _initPosition,
+                      zoom: 14.4,
+                    ),
+                    mapType: MapType.normal,
+                    markers: Set<Marker>.of(markers.values),
+                    myLocationButtonEnabled: false,
+                    myLocationEnabled: true,
+                  ),
+                  Padding(
+                    padding:
+                        EdgeInsets.all(8.0) + MediaQuery.of(context).padding,
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: Column(
+                        children: <Widget>[
+                          _settingsButton(),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
-      ),
     );
   }
 
@@ -98,8 +130,9 @@ class _MapPageState extends State<MapPage> {
     if (tappedMarker != null) {
       setState(() {
         if (markers.containsKey(selectedMarker)) {
-          final Marker resetOld = markers[selectedMarker]
-              .copyWith(iconParam: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen));
+          final Marker resetOld = markers[selectedMarker].copyWith(
+              iconParam: BitmapDescriptor.defaultMarkerWithHue(
+                  BitmapDescriptor.hueGreen));
           markers[selectedMarker] = resetOld;
         }
         selectedMarker = markerId;
@@ -147,9 +180,11 @@ class _MapPageState extends State<MapPage> {
     var response = await http.get(url);
     print('Response status: ${response.statusCode}');
     if (response.statusCode == 200) {
-      List<dynamic> jsonResponse = convert.jsonDecode(convert.utf8.decode(response.bodyBytes));
+      List<dynamic> jsonResponse =
+          convert.jsonDecode(convert.utf8.decode(response.bodyBytes));
       debugPrint('\nJson body: ${jsonResponse[0]} \n');
-      debugPrint("json response längd: " + jsonResponse.length.toString() + "\n");
+      debugPrint(
+          "json response längd: " + jsonResponse.length.toString() + "\n");
       setState(() {
         for (var obj in jsonResponse) {
           double lat = double.parse(obj["lat"]);
@@ -161,7 +196,7 @@ class _MapPageState extends State<MapPage> {
           for (var entry in entries) {
             String urlString = entry["img"];
             images.add(Image.network(urlString));
-          }          
+          }
           places.add(new Place(new LatLng(lat, lon), title, images, desc));
         }
       });
@@ -171,27 +206,6 @@ class _MapPageState extends State<MapPage> {
     setMarkers();
     return;
   }
-
-  /*getCurrentLocation() {
-    final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
-
-    geolocator.getCurrentPosition().then((Position position) {
-      setState(() {
-        _currentPosition = position;
-        _thisLocation = CameraPosition(
-          target: LatLng(_currentPosition.latitude, _currentPosition.longitude),
-          zoom: 12,
-        );
-      });
-    }).catchError((e) {
-      print(e);
-    });
-  }
-
-  Future<void> _goToPosition() async {
-    final GoogleMapController controller = await _controller.future;
-    controller.moveCamera(CameraUpdate.newCameraPosition(_thisLocation));
-  }*/
 }
 
 class Place {
@@ -209,7 +223,8 @@ class Place {
             " position:" +
             position.toString() +
             "description: " +
-            description + "\n" ??
+            description +
+            "\n" ??
         "no description.\n";
   }
 }
