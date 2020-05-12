@@ -26,7 +26,7 @@ class InfoPage extends StatelessWidget {
             autoplay: false,
             animationCurve: Curves.fastOutSlowIn,
             animationDuration: Duration(milliseconds: 2000),
-            images: [place.img],
+            images: place.images,
           )),
     );
   }
