@@ -1,10 +1,22 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:history_go/src/pages/home/newMission.dart';
 
 class MissionsPage extends StatelessWidget {
-  
-  Widget _missionButton(String title) {
+
+  Widget _appBar(String title) {
+    return AppBar(
+      backgroundColor: Colors.blue,
+      title: Text(
+        title,
+        style: TextStyle(fontSize: 26.0),
+      ),
+      actions: <Widget>[],
+    );
+  }
+
+  Widget _missionButton(String title, BuildContext context) {
     return Container(
         width: 280.0,
         height: 55.0,
@@ -15,7 +27,8 @@ class MissionsPage extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
           ),
           onPressed: () {
-            //Navigator.of(context).pushNamed();
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => NewMission()));
           },
           color: Colors.red[200],
           child: Text(title, style: TextStyle(color: Colors.white)),
@@ -44,26 +57,30 @@ class MissionsPage extends StatelessWidget {
     );
   }
 
-  Widget _missionListView() {
+  Widget _missionListView(BuildContext context) {
     return Container(
+      height: 350,
       padding: EdgeInsets.only(top: 8.0, bottom: 12.0, left: 20.0, right: 20.0),
-      margin: const EdgeInsets.symmetric(vertical: 20.0),
+      margin: const EdgeInsets.only(bottom: 15.0),
       decoration: new BoxDecoration(
         color: Colors.white54
             .withOpacity(0.3), //new Color.fromRGBO(255, 0, 0, 0.0),
         borderRadius: new BorderRadius.all(Radius.circular(12)),
       ),
-      child: Column(
+      child: ListView(
+        scrollDirection: Axis.vertical,
         children: <Widget>[
-          Text(
+          const Text(
             'Populära uppdrag nära dig',
             style: TextStyle(fontSize: 22.0, color: Colors.white),
             textAlign: TextAlign.center,
           ),
-          _missionButton('Runda 1'),
-          _missionButton('Runda 2'),
-          _missionButton('Runda 3'),
-          _missionButton('Runda 4'),
+          _missionButton('Stockholms blodbad', context),
+          _missionButton('Runda 2', context),
+          _missionButton('Runda 3', context),
+          _missionButton('Runda 4', context),
+          _missionButton('Runda 5', context),
+          _missionButton('Runda 6', context),
         ],
       ),
     );
@@ -72,6 +89,7 @@ class MissionsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: _appBar('Uppdrag'),
       body: Center(
         child: Container(
           width: MediaQuery.of(context).size.width,
@@ -84,10 +102,9 @@ class MissionsPage extends StatelessWidget {
           ),
           child: Column(
             children: <Widget>[
-              _missionListView(),
+              _missionListView(context),
               _actionButton('Skapa nytt uppdrag', Colors.deepOrangeAccent),
               _actionButton('Utförda uppdrag', Colors.red),
-              _actionButton('Syfteslös knapp', Colors.green),
             ],
           ),
         ),
