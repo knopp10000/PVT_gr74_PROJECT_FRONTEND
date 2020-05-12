@@ -9,3 +9,4 @@ export 'home/settings.dart';
 export 'login/login.dart';
 export 'login/signup.dart';
 export 'login/welcome.dart';
+export 'user.dart';

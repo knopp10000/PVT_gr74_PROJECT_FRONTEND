@@ -148,19 +148,21 @@ class _MapPageState extends State<MapPage> {
     print('Response status: ${response.statusCode}');
     if (response.statusCode == 200) {
       List<dynamic> jsonResponse = convert.jsonDecode(convert.utf8.decode(response.bodyBytes));
-      debugPrint('\nJson body: ${jsonResponse[0]["desc"]}');
-
-      print(jsonResponse.length);
+      debugPrint('\nJson body: ${jsonResponse[0]} \n');
+      debugPrint("json response längd: " + jsonResponse.length.toString() + "\n");
       setState(() {
         for (var obj in jsonResponse) {
           double lat = double.parse(obj["lat"]);
           double lon = double.parse(obj["lon"]);
-          String title = obj["title"];
-          String desc = obj["desc"];
-          String urlString = obj["img"];
-          Image img = new Image.network(urlString);
-
-          places.add(new Place(new LatLng(lat, lon), title, img, desc));
+          String title = obj["entries"][0]["title"];
+          String desc = obj["entries"][0]["desc"];
+          List<Image> images = new List();
+          List<dynamic> entries = obj["entries"];
+          for (var entry in entries) {
+            String urlString = entry["img"];
+            images.add(Image.network(urlString));
+          }          
+          places.add(new Place(new LatLng(lat, lon), title, images, desc));
         }
       });
     } else {
@@ -170,7 +172,7 @@ class _MapPageState extends State<MapPage> {
     return;
   }
 
-  /*_getCurrentLocation() {
+  /*getCurrentLocation() {
     final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
 
     geolocator.getCurrentPosition().then((Position position) {
@@ -195,10 +197,10 @@ class _MapPageState extends State<MapPage> {
 class Place {
   LatLng position;
   String name;
-  Image img;
+  List<Image> images;
   String description;
 
-  Place(this.position, this.name, this.img, this.description);
+  Place(this.position, this.name, this.images, this.description);
 
   @override
   String toString() {
@@ -207,7 +209,7 @@ class Place {
             " position:" +
             position.toString() +
             "description: " +
-            description ??
-        "no description.";
+            description + "\n" ??
+        "no description.\n";
   }
 }
