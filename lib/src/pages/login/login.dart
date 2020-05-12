@@ -1,4 +1,7 @@
 import 'dart:convert' as JSON;
+import 'dart:io';
+import 'package:history_go/src/pages/pages.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
@@ -202,7 +205,25 @@ class _LoginPageState extends State<LoginPage> {
             'https://graph.facebook.com/v2.12/me?fields=name,picture,email&access_token=$token');
         final profile = JSON.jsonDecode(graphResponse.body);
         print(profile);
-        setState(() {
+
+        UserInfo.name = profile["name"];
+        UserInfo.id = profile["id"];
+        UserInfo.email = profile["email"];
+        UserInfo.imgUrl = profile["picture"]["url"];
+
+/*        var response = await http.get(UserInfo.imgUrl); // <--2
+        var documentDirectory = await getApplicationDocumentsDirectory();
+        var firstPath = documentDirectory.path + "/images";
+        var filePathAndName = documentDirectory.path + '/images/pic.jpg';
+        //comment out the next three lines to prevent the image from being saved
+        //to the device to show that it's coming from the internet
+        await Directory(firstPath).create(recursive: true); // <-- 1
+        File file2 = new File(filePathAndName);             // <-- 2
+        file2.writeAsBytesSync(response.bodyBytes);         // <-- 3
+
+        UserInfo.img = Image.file(file2);*/
+
+            setState(() {
           userProfile = profile;
           _isLoggedIn = true;
         });

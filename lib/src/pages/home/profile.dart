@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:history_go/src/pages/pages.dart';
+
 
 class ProfilePage extends StatelessWidget {
 
@@ -32,7 +34,7 @@ class ProfilePage extends StatelessWidget {
         child: CircleAvatar(
           radius: 120.0,
           backgroundColor: Colors.transparent,
-          backgroundImage: AssetImage('assets/kaknas.jpg'),
+          backgroundImage: UserInfo.img ?? AssetImage('assets/kaknas.jpg'),
         ),
       ),
     );
@@ -45,7 +47,7 @@ class ProfilePage extends StatelessWidget {
         backgroundColor: Colors.blue,
         centerTitle: true,
         title: Text(
-          'Profil',
+          UserInfo.name ?? 'Profil',
           style: TextStyle(fontSize: 26.0, letterSpacing: 0.8),
         ),
         actions: <Widget>[
