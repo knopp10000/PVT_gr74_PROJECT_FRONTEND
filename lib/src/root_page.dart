@@ -87,5 +87,5 @@ class _RootPageState extends State<RootPage> {
       default:
         return buildWaitingScreen();
     }
+    }
   }
-}
