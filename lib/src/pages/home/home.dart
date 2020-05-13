@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:history_go/src/pages/pages.dart';
 
+import '../../auth.dart';
+
 class HomePage extends StatefulWidget {
-  HomePage({Key key, this.title}) : super(key: key);
-  final String title;
+  /*HomePage({Key key, this.title}) : super(key: key);
+  final String title;*/
+  HomePage({Key key, this.auth, this.userId, this.logoutCallback})
+      : super(key: key);
+
+  final BaseAuth auth;
+  final VoidCallback logoutCallback;
+  final String userId;
 
   @override
   _HomePageState createState() => _HomePageState();

@@ -1,9 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:history_go/src/auth.dart';
 import 'package:history_go/src/pages/pages.dart';
+import 'package:history_go/src/root_page.dart';
 
 
 void main() => runApp(MyApp());
 
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return new MaterialApp(
+        title: 'Flutter login demo',
+        debugShowCheckedModeBanner: false,
+        theme: new ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: new RootPage(auth: new Auth()));
+  }
+
+/*
 class MyApp extends StatelessWidget {
   //This is the root of the application
   @override
@@ -46,5 +61,5 @@ class UndefinedView extends StatelessWidget {
         child: Text('Route for $name is not defined'),
       ),
     );
-  }
+  }*/
 }

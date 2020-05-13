@@ -1,5 +1,6 @@
 import 'dart:convert' as JSON;
 import 'dart:io';
+import 'package:history_go/src/auth.dart';
 import 'package:history_go/src/pages/pages.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -9,7 +10,13 @@ import 'package:history_go/src/widgets/title_logo.dart';
 import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
-  LoginPage({Key key, this.title}) : super(key: key);
+  //LoginPage({Key key, this.title}) : super(key: key);
+  LoginPage({this.auth, this.loginCallback, this.title});
+
+  final BaseAuth auth;
+  final VoidCallback loginCallback;
+
+
   final String title;
 
   @override
