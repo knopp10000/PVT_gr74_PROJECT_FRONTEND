@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "995481268204",
+    "firebase_url": "https://decent-trail-172514.firebaseio.com",
+    "project_id": "decent-trail-172514",
+    "storage_bucket": "decent-trail-172514.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:995481268204:android:03fec25d9ebc3b5382dac9",
+        "android_client_info": {
+          "package_name": "com.historygo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "995481268204-7v5dhs1bhoftmmsn2lv4ipir38pbi9sm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3laztUxtcYaQbUsQIEEZNaRew6NgjR_o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "995481268204-7v5dhs1bhoftmmsn2lv4ipir38pbi9sm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
