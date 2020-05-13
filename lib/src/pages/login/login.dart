@@ -204,8 +204,15 @@ class _LoginPageState extends State<LoginPage> {
   Widget _facebookButton() {
     return InkWell(
         onTap: () {
-          debugPrint('username: fb');
-          _loginWithFB();
+          initiateFacebookLogin().whenComplete(() {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) {
+                  return MapPage();
+                },
+              ),
+            );
+          });
         },
         child: Container(
           width: MediaQuery.of(context).size.width,
