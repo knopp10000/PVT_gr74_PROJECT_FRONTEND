@@ -2,7 +2,7 @@ import 'dart:convert' as JSON;
 import 'dart:io';
 import 'package:history_go/src/auth.dart';
 import 'package:history_go/src/pages/pages.dart';
-import 'package:path_provider/path_provider.dart';
+//import 'package:path_provider/path_provider.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
@@ -175,6 +175,46 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  Widget _googleButton() {
+    return OutlineButton(
+      splashColor: Colors.grey,
+      onPressed: () {
+        signInWithGoogle().whenComplete(() {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) {
+                return WelcomePage();
+              },
+            ),
+          );
+        });
+      },
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+      highlightElevation: 0,
+      borderSide: BorderSide(color: Colors.grey),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Image(image: AssetImage("assets/google_logo.png"), height: 35.0),
+            Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: Text(
+                'Sign in with Google',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.grey,
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _facebookButton() {
     return InkWell(
         onTap: () {
@@ -329,6 +369,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 _divider(),
                 _facebookButton(),
+                _googleButton(),
                 Expanded(
                   flex: 2,
                   child: SizedBox(),
