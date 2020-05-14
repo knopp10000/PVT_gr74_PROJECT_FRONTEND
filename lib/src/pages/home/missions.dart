@@ -8,6 +8,7 @@ class MissionsPage extends StatelessWidget {
   Widget _appBar(String title) {
     return AppBar(
       backgroundColor: Colors.blue,
+      centerTitle: true,
       title: Text(
         title,
         style: TextStyle(fontSize: 26.0),
