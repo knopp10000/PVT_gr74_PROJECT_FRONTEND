@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:history_go/src/widgets/title_logo.dart';
 
 class WelcomePage extends StatefulWidget {
-  WelcomePage({Key key, this.title}) : super(key: key);
+  var auth;
+  var loginCallback;
+
+  //WelcomePage({Key key, this.title}) : super(key: key);
+  WelcomePage({this.auth, this.loginCallback, this.title});
   final String title;
 
   @override

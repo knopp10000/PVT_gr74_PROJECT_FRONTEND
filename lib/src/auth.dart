@@ -8,8 +8,7 @@ final GoogleSignIn googleSignIn = GoogleSignIn();
 
 Future<String> initiateFacebookLogin() async {
   var facebookLogin = FacebookLogin();
-  var facebookLoginResult =
-  await facebookLogin.logInWithReadPermissions(['email']);
+  var facebookLoginResult = await facebookLogin.logInWithReadPermissions(['email']);
 
 }
 

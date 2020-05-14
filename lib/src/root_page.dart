@@ -77,6 +77,7 @@ class _RootPageState extends State<RootPage> {
         break;
       case AuthStatus.LOGGED_IN:
         print('You are logged in!');
+        print('userId: ' + _userId);
         if (_userId.length > 0 && _userId != null) {
           return new HomePage(
             userId: _userId,
@@ -84,7 +85,8 @@ class _RootPageState extends State<RootPage> {
             logoutCallback: logoutCallback,
           );
         } else
-          return buildWaitingScreen();
+          print('userId: ' + _userId);
+        return buildWaitingScreen();
         break;
       default:
         return buildWaitingScreen();

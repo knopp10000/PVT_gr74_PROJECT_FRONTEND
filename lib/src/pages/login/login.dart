@@ -20,10 +20,14 @@ class LoginPage extends StatefulWidget {
   final String title;
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _LoginPageState createState() => _LoginPageState(loginCallback);
 }
 
 class _LoginPageState extends State<LoginPage> {
+  VoidCallback loginCallback;
+
+  _LoginPageState(this.loginCallback);
+
   bool _isLoggedIn = false;
   Map userProfile;
 
@@ -179,13 +183,14 @@ class _LoginPageState extends State<LoginPage> {
     return InkWell(
       onTap: () {
         signInWithGoogle().whenComplete(() {
-          Navigator.of(context).push(
+/*          Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) {
                 return HomePage();
               },
             ),
-          );
+          );*/
+          loginCallback();
         });
       },
       child: Padding(
