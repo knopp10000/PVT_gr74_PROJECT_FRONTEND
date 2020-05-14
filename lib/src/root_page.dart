@@ -28,9 +28,9 @@ class _RootPageState extends State<RootPage> {
       setState(() {
         if (user != null) {
           _userId = user?.uid;
+          print("userId: " + _userId);
         }
-        authStatus =
-        user?.uid == null ? AuthStatus.NOT_LOGGED_IN : AuthStatus.LOGGED_IN;
+        authStatus = user?.uid == null ? AuthStatus.NOT_LOGGED_IN : AuthStatus.LOGGED_IN;
       });
     });
   }
@@ -69,12 +69,14 @@ class _RootPageState extends State<RootPage> {
         return buildWaitingScreen();
         break;
       case AuthStatus.NOT_LOGGED_IN:
+        print('you are not logged in');
         return new LoginPage(
           auth: widget.auth,
           loginCallback: loginCallback,
         );
         break;
       case AuthStatus.LOGGED_IN:
+        print('You are logged in!');
         if (_userId.length > 0 && _userId != null) {
           return new HomePage(
             userId: _userId,
