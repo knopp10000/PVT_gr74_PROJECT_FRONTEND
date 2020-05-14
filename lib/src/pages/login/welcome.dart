@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:history_go/src/widgets/title_logo.dart';
+import 'package:history_go/src/components/title_logo.dart';
 
 class WelcomePage extends StatefulWidget {
   WelcomePage({Key key, this.title}) : super(key: key);

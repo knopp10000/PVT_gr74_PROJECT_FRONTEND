@@ -1,12 +1,12 @@
 import 'dart:convert' as JSON;
 import 'dart:io';
-import 'package:history_go/src/pages/pages.dart';
-import 'package:path_provider/path_provider.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import 'package:history_go/src/widgets/title_logo.dart';
+import 'package:history_go/src/components/title_logo.dart';
+import 'package:history_go/src/models/user.dart';
 import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key, this.title}) : super(key: key);

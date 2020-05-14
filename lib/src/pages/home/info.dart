@@ -1,22 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
-import 'package:history_go/src/pages/pages.dart';
+import 'package:history_go/src/models/place.dart';
 
 class InfoPage extends StatelessWidget {
-  Place place;
-
-  Widget _appBar(String title) {
-    return AppBar(
-      backgroundColor: Colors.blue,
-      title: Text(
-        title,
-        style: TextStyle(fontSize: 26.0),
-      ),
-      actions: <Widget>[],
-    );
-  }
+  static Place place;
 
   Widget _infoPicture() {
+    List<Image> images = new List();
+    place.getImages().forEach((img) {images.add(Image.network(img));});
     return Hero(
       tag: 'infoPic',
       child: SizedBox(
@@ -26,7 +17,7 @@ class InfoPage extends StatelessWidget {
             autoplay: false,
             animationCurve: Curves.fastOutSlowIn,
             animationDuration: Duration(milliseconds: 2000),
-            images: place.images,
+            images: images,
           )),
     );
   }
@@ -43,7 +34,7 @@ class InfoPage extends StatelessWidget {
 
   Widget noPlacePage(BuildContext context) {
     return Scaffold(
-      appBar: _appBar('Ingen plats'),
+      appBar: AppBar(),
       body: Center(
         child: Container(
           width: MediaQuery.of(context).size.width,
@@ -74,7 +65,7 @@ class InfoPage extends StatelessWidget {
       return noPlacePage(context);
     else {
       return Scaffold(
-        appBar: _appBar(place.name),
+        appBar: AppBar(),
         body: Center(
           child: Container(
             width: MediaQuery.of(context).size.width,
@@ -88,7 +79,8 @@ class InfoPage extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 _infoPicture(),
-                _infoText(place.description),
+                //TODO: Fix infopage
+                //_infoText(place),
               ],
             ),
           ),
