@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">HistoryGo</string>
-<!--    <string name="facebook_app_id">297731957903484</string>
-    <string name="fb_login_protocol_scheme">fb297731957903484</string>-->
-
-    <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
-    <string name="facebook_application_id" translatable="false">297731957903484</string>
-    <string name="facebook_login_protocol_scheme" translatable="false">fb297731957903484</string>
-
+    <string name="facebook_app_id">297731957903484</string>
+    <string name="fb_login_protocol_scheme">fb297731957903484</string>
 </resources>
