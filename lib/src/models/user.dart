@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-
-
-class UserInfo{
+class UserInfo {
   static String name;
   static String id;
   static String email;
@@ -14,6 +12,4 @@ class UserInfo{
   String toString() {
     return "name: " + name;
   }
-
-
 }

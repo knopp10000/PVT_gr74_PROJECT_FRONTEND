@@ -1,11 +1,10 @@
 import 'dart:async';
-import 'dart:convert' as convert;
 
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:history_go/src/pages/pages.dart';
+import 'package:history_go/src/models/place.dart';
+import 'package:history_go/src/services/place_repository.dart';
 
 class MapPage extends StatefulWidget {
   MapPage({Key key, this.title}) : super(key: key);
@@ -33,17 +32,28 @@ class _MapPageState extends State<MapPage> {
   @override
   void initState() {
     super.initState();
-    _getUserPosition();
-    getPlaces();
+    updatePlaces();
+    setMarkers();
   }
 
-  void _getUserPosition() async {
+  Future<LatLng> _getUserPosition() async {
     Position position = await Geolocator().getCurrentPosition();
+
     List<Placemark> placemark =
         await Geolocator().placemarkFromPosition(position);
     setState(() {
       _initPosition = LatLng(position.latitude, position.longitude);
       print('${placemark[0].name}');
+    });
+    return _initPosition;
+  }
+
+  Future<void> updatePlaces() async {
+    List<Place> _updatedPlaces =
+        await PlaceRepository().getPlaces(await _getUserPosition());
+    this.setState(() {
+      places = _updatedPlaces;
+      setMarkers();
     });
   }
 
@@ -155,8 +165,9 @@ class _MapPageState extends State<MapPage> {
         markerId: markerId,
         position: place.position,
         infoWindow: InfoWindow(
-            title: place.name,
-            snippet: place.description ?? 'saknar beskrivning',
+            //TODO: ska infowindow visa titel och beskrivning för första entryn i platsen??
+            title: place.entries[0].title,
+            snippet: place.entries[0].desc ?? 'saknar beskrivning',
             onTap: () =>
                 Navigator.pushNamed(context, "/info", arguments: place)),
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
@@ -172,59 +183,5 @@ class _MapPageState extends State<MapPage> {
     for (Place p in places) {
       addMarker(p);
     }
-  }
-
-  void getPlaces() async {
-    //var url = 'http://localhost:8080/getPlaces?lat=59.321&lon=18.095';
-    var url = 'https://group4-75.pvt.dsv.su.se/getPlaces?lat=59.329&lon=18.068';
-    var response = await http.get(url);
-    print('Response status: ${response.statusCode}');
-    if (response.statusCode == 200) {
-      List<dynamic> jsonResponse =
-          convert.jsonDecode(convert.utf8.decode(response.bodyBytes));
-      debugPrint('\nJson body: ${jsonResponse[0]} \n');
-      debugPrint(
-          "json response längd: " + jsonResponse.length.toString() + "\n");
-      setState(() {
-        for (var obj in jsonResponse) {
-          double lat = double.parse(obj["lat"]);
-          double lon = double.parse(obj["lon"]);
-          String title = obj["entries"][0]["title"];
-          String desc = obj["entries"][0]["desc"];
-          List<Image> images = new List();
-          List<dynamic> entries = obj["entries"];
-          for (var entry in entries) {
-            String urlString = entry["img"];
-            images.add(Image.network(urlString));
-          }
-          places.add(new Place(new LatLng(lat, lon), title, images, desc));
-        }
-      });
-    } else {
-      print('Request failed with status: ${response.statusCode}.');
-    }
-    setMarkers();
-    return;
-  }
-}
-
-class Place {
-  LatLng position;
-  String name;
-  List<Image> images;
-  String description;
-
-  Place(this.position, this.name, this.images, this.description);
-
-  @override
-  String toString() {
-    return "name: " +
-            name +
-            " position:" +
-            position.toString() +
-            "description: " +
-            description +
-            "\n" ??
-        "no description.\n";
   }
 }

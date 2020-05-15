@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:history_go/src/pages/pages.dart';
+import 'package:history_go/src/models/user.dart';
 
 
 class ProfilePage extends StatelessWidget {
