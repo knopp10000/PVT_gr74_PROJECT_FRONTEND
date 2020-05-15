@@ -1,29 +1,26 @@
 import 'dart:convert' as JSON;
-import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:history_go/src/components/title_logo.dart';
 import 'package:history_go/src/models/user.dart';
 import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
+
+final FirebaseAuth _auth = FirebaseAuth.instance;
+//final GoogleSignIn _googleSignIn = GoogleSignIn();
+bool _isLoggedIn = false;
 
 class LoginPage extends StatefulWidget {
-  LoginPage({Key key, this.title}) : super(key: key);
-  final String title;
+  LoginPage({Key key}) : super(key: key);
+  final String title = 'Login';
 
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  bool _isLoggedIn = false;
   Map userProfile;
-
-  final facebookLogin = FacebookLogin();
-
-  String _email;
-  String _password;
 
   Widget _backButton() {
     return InkWell(
@@ -46,103 +43,11 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _emailEntry(String title) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            title,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          TextField(
-              onChanged: (value) {
-                setState(() {
-                  _email = value;
-                });
-              },
-              obscureText: false,
-              decoration: InputDecoration(
-                  border: InputBorder.none,
-                  fillColor: Color(0xfff3f3f4),
-                  filled: true))
-        ],
-      ),
-    );
-  }
-
-  Widget _passwordEntry(String title) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            title,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          TextField(
-              onChanged: (value) {
-                setState(() {
-                  _password = value;
-                });
-              },
-              obscureText: true,
-              decoration: InputDecoration(
-                  border: InputBorder.none,
-                  fillColor: Color(0xfff3f3f4),
-                  filled: true))
-        ],
-      ),
-    );
-  }
-
-  Widget _submitButton() {
-    return InkWell(
-        onTap: () {
-          debugPrint('username: $_email');
-          debugPrint('password: $_password');
-          _logInWithEmail();
-        },
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          padding: EdgeInsets.symmetric(vertical: 15),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(5)),
-              boxShadow: <BoxShadow>[
-                BoxShadow(
-                    color: Colors.grey.shade200,
-                    offset: Offset(2, 4),
-                    blurRadius: 5,
-                    spreadRadius: 2)
-              ],
-              gradient: LinearGradient(
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                  colors: [Color(0xfffbb448), Color(0xfff7892b)])),
-          child: Text(
-            'Login',
-            style: TextStyle(fontSize: 20, color: Colors.white),
-          ),
-        ));
-  }
-
   Widget _divider() {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       child: Row(
         children: <Widget>[
-          SizedBox(
-            width: 20,
-          ),
           Expanded(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 10),
@@ -160,87 +65,13 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
           ),
-          SizedBox(
-            width: 20,
-          ),
         ],
       ),
     );
   }
 
-  Widget _facebookButton() {
-    return InkWell(
-        onTap: () {
-          debugPrint('username: fb');
-          _loginWithFB();
-        },
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          padding: EdgeInsets.symmetric(vertical: 15),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            image: DecorationImage(image: AssetImage('assets/fbBtn.png')),
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                  color: Colors.grey.shade200,
-                  offset: Offset(2, 4),
-                  blurRadius: 5,
-                  spreadRadius: 2)
-            ],
-          ),
-          child: Text(
-            '',
-            style: TextStyle(fontSize: 20, color: Colors.white),
-          ),
-        ));
-  }
-
-  _loginWithFB() async {
-    final result = await facebookLogin.logInWithReadPermissions(['email']);
-
-    switch (result.status) {
-      case FacebookLoginStatus.loggedIn:
-        final token = result.accessToken.token;
-        final graphResponse = await http.get(
-            'https://graph.facebook.com/v2.12/me?fields=name,picture,email&access_token=$token');
-        final profile = JSON.jsonDecode(graphResponse.body);
-        print(profile);
-
-        UserInfo.name = profile["name"];
-        UserInfo.id = profile["id"];
-        UserInfo.email = profile["email"];
-        UserInfo.imgUrl = profile["picture"]["url"];
-
-/*        var response = await http.get(UserInfo.imgUrl); // <--2
-        var documentDirectory = await getApplicationDocumentsDirectory();
-        var firstPath = documentDirectory.path + "/images";
-        var filePathAndName = documentDirectory.path + '/images/pic.jpg';
-        //comment out the next three lines to prevent the image from being saved
-        //to the device to show that it's coming from the internet
-        await Directory(firstPath).create(recursive: true); // <-- 1
-        File file2 = new File(filePathAndName);             // <-- 2
-        file2.writeAsBytesSync(response.bodyBytes);         // <-- 3
-
-        UserInfo.img = Image.file(file2);*/
-
-            setState(() {
-          userProfile = profile;
-          _isLoggedIn = true;
-        });
-        Navigator.pushNamedAndRemoveUntil(context, '/home', ModalRoute.withName('/'));
-        break;
-
-      case FacebookLoginStatus.cancelledByUser:
-        setState(() => _isLoggedIn = false);
-        break;
-      case FacebookLoginStatus.error:
-        setState(() => _isLoggedIn = false);
-        break;
-    }
-  }
-
   _logout() {
-    facebookLogin.logOut();
+    //facebookLogin.logOut();
     setState(() {
       _isLoggedIn = false;
     });
@@ -277,15 +108,6 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _emailPasswordWidget() {
-    return Column(
-      children: <Widget>[
-        _emailEntry("Email"),
-        _passwordEntry("Password"),
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -308,11 +130,7 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(
                   height: 50,
                 ),
-                _emailPasswordWidget(),
-                SizedBox(
-                  height: 20,
-                ),
-                _submitButton(),
+                _EmailPasswordForm(),
                 Container(
                   padding: EdgeInsets.symmetric(vertical: 10),
                   alignment: Alignment.centerRight,
@@ -321,7 +139,7 @@ class _LoginPageState extends State<LoginPage> {
                           TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
                 ),
                 _divider(),
-                _facebookButton(),
+                _OtherProvidersSignInSection(),
                 Expanded(
                   flex: 2,
                   child: SizedBox(),
@@ -329,6 +147,37 @@ class _LoginPageState extends State<LoginPage> {
               ],
             ),
           ),
+          /*Container(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Expanded(
+                  flex: 3,
+                  child: SizedBox(),
+                ),
+                TitleLogo(),
+                SizedBox(
+                  height: 50,
+                ),
+                _EmailPasswordForm(),
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  alignment: Alignment.centerRight,
+                  child: Text('Forgot Password?',
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                ),
+                _divider(),
+                _OtherProvidersSignInSection(),
+                Expanded(
+                  flex: 2,
+                  child: SizedBox(),
+                ),
+              ],
+            ),
+          ),*/
           Align(
             alignment: Alignment.bottomCenter,
             child: _createAccountLabel(),
@@ -338,14 +187,266 @@ class _LoginPageState extends State<LoginPage> {
       ),
     )));
   }
+}
 
-  void _logInWithEmail() {
-    if (_email == "a" && _password == "a") {
-      Navigator.pushNamedAndRemoveUntil(context, '/home', ModalRoute.withName('/'));
+class _EmailPasswordForm extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _EmailPasswordFormState();
+}
+
+class _EmailPasswordFormState extends State<_EmailPasswordForm> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  bool _success;
+  String _userEmail;
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          TextFormField(
+            controller: _emailController,
+            decoration: const InputDecoration(labelText: 'Email'),
+            validator: (String value) {
+              if (value.isEmpty) {
+                return 'Please enter some text';
+              }
+              return null;
+            },
+          ),
+          TextFormField(
+            controller: _passwordController,
+            decoration: const InputDecoration(labelText: 'Password'),
+            obscureText: true,
+            validator: (String value) {
+              if (value.isEmpty) {
+                return 'Please enter some text';
+              }
+              return null;
+            },
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            alignment: Alignment.center,
+            child: _submitButton(),
+          ),
+          Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              _success == null
+                  ? ''
+                  : (_success
+                      ? 'Successfully signed in ' + _userEmail
+                      : 'Sign in failed'),
+              style: TextStyle(color: Colors.red),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _submitButton() {
+    return InkWell(
+        onTap: () async {
+          if (_formKey.currentState.validate()) {
+            _signInWithEmailAndPassword();
+          }
+        },
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          padding: EdgeInsets.symmetric(vertical: 15),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(5)),
+              boxShadow: <BoxShadow>[
+                BoxShadow(
+                    color: Colors.grey.shade200,
+                    offset: Offset(2, 4),
+                    blurRadius: 5,
+                    spreadRadius: 2)
+              ],
+              gradient: LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: [Color(0xfffbb448), Color(0xfff7892b)])),
+          child: Text(
+            'Submit',
+            style: TextStyle(fontSize: 20, color: Colors.white),
+          ),
+        ));
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  void _signInWithEmailAndPassword() async {
+    final FirebaseUser user = (await _auth.signInWithEmailAndPassword(
+      email: _emailController.text,
+      password: _passwordController.text,
+    ))
+        .user;
+    if (user != null) {
+      setState(() {
+        _success = true;
+        _userEmail = user.email;
+      });
     } else {
-      debugPrint('Email or password was wrong!');
-      debugPrint('username: $_email');
-      debugPrint('password: $_password');
+      _success = false;
     }
   }
 }
+
+class _OtherProvidersSignInSection extends StatefulWidget {
+  _OtherProvidersSignInSection();
+
+  @override
+  State<StatefulWidget> createState() => _OtherProvidersSignInSectionState();
+}
+
+class _OtherProvidersSignInSectionState
+    extends State<_OtherProvidersSignInSection> {
+  final TextEditingController _tokenController = TextEditingController();
+
+  final facebookLogin = FacebookLogin();
+
+  String _message = '';
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        _facebookButton(),
+        Container(
+          alignment: Alignment.center,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Text(
+            _message,
+            style: TextStyle(color: Colors.red),
+          ),
+        )
+      ],
+    );
+  }
+
+  void _signInWithFacebook() async {
+    final result = await facebookLogin.logInWithReadPermissions(['email']);
+
+    switch (result.status) {
+      case FacebookLoginStatus.loggedIn:
+        final AuthCredential credential = FacebookAuthProvider.getCredential(
+          accessToken: result.accessToken.token,
+        );
+
+        final FirebaseUser user =
+            (await _auth.signInWithCredential(credential)).user;
+
+        assert(user.email != null);
+        assert(user.displayName != null);
+        assert(!user.isAnonymous);
+        assert(await user.getIdToken() != null);
+
+        final FirebaseUser currentUser = await _auth.currentUser();
+        assert(user.uid == currentUser.uid);
+        setState(() {
+          if (user != null) {
+            _message = 'Successfully signed in with Facebook.\n' + 
+              'id: ' + user.uid + "\nname: " + user.displayName;
+          } else {
+            _message = 'Failed to sign in with Facebook. ';
+          }
+        });
+
+        break;
+      case FacebookLoginStatus.cancelledByUser:
+        setState(() => _isLoggedIn = false);
+        break;
+      case FacebookLoginStatus.error:
+        setState(() => _isLoggedIn = false);
+        break;
+    }
+  }
+
+  Widget _facebookButton() {
+    return InkWell(
+        onTap: () {
+          debugPrint('Facebook button pressed');
+          _signInWithFacebook();
+        },
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          padding: EdgeInsets.symmetric(vertical: 15),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            image: DecorationImage(image: AssetImage('assets/fbBtn.png')),
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                  color: Colors.grey.shade200,
+                  offset: Offset(2, 4),
+                  blurRadius: 5,
+                  spreadRadius: 2)
+            ],
+          ),
+          child: Text(
+            '',
+            style: TextStyle(fontSize: 20, color: Colors.white),
+          ),
+        ));
+  }
+}
+
+/* _signInWithFacebook() async {
+    final result = await facebookLogin.logInWithReadPermissions(['email']);
+
+    switch (result.status) {
+      case FacebookLoginStatus.loggedIn:
+        final token = result.accessToken.token;
+        final graphResponse = await http.get(
+            'https://graph.facebook.com/v2.12/me?fields=name,picture,email&access_token=$token');
+        final profile = JSON.jsonDecode(graphResponse.body);
+        print(profile);
+
+        UserInfo.name = profile["name"];
+        UserInfo.id = profile["id"];
+        UserInfo.email = profile["email"];
+        UserInfo.imgUrl = profile["picture"]["url"];
+
+        var response = await http.get(UserInfo.imgUrl); // <--2
+        var documentDirectory = await getApplicationDocumentsDirectory();
+        var firstPath = documentDirectory.path + "/images";
+        var filePathAndName = documentDirectory.path + '/images/pic.jpg';
+        //comment out the next three lines to prevent the image from being saved
+        //to the device to show that it's coming from the internet
+        await Directory(firstPath).create(recursive: true); // <-- 1
+        File file2 = new File(filePathAndName);             // <-- 2
+        file2.writeAsBytesSync(response.bodyBytes);         // <-- 3
+
+        UserInfo.img = Image.file(file2);
+
+            setState(() {
+          userProfile = profile;
+          _isLoggedIn = true;
+        });
+        Navigator.pushNamedAndRemoveUntil(context, '/home', ModalRoute.withName('/'));
+        break;
+
+      case FacebookLoginStatus.cancelledByUser:
+        setState(() => _isLoggedIn = false);
+        break;
+      case FacebookLoginStatus.error:
+        setState(() => _isLoggedIn = false);
+        break;
+    }
+  }*/

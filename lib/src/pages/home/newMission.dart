@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:history_go/src/pages/pages.dart';
 
 class NewMission extends StatelessWidget {
 

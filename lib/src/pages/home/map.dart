@@ -24,11 +24,6 @@ class _MapPageState extends State<MapPage> {
 
   static LatLng _initPosition;
 
-  static const CameraPosition _gurras_torg = CameraPosition(
-    target: LatLng(59.329, 18.068),
-    zoom: 16,
-  );
-
   @override
   void initState() {
     super.initState();
