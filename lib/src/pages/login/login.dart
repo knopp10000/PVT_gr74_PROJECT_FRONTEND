@@ -301,6 +301,8 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
       setState(() {
         _success = true;
         _userEmail = user.email;
+        print('Successful login: email: ' + user.email + " name: " + user.displayName);
+        Navigator.pushNamed(context, "/home");
       });
     } else {
       _success = false;
@@ -364,6 +366,7 @@ class _OtherProvidersSignInSectionState
           if (user != null) {
             _message = 'Successfully signed in with Facebook.\n' + 
               'id: ' + user.uid + "\nname: " + user.displayName;
+            Navigator.pushNamed(context, "/home");
           } else {
             _message = 'Failed to sign in with Facebook. ';
           }
