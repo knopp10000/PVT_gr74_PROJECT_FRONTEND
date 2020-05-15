@@ -1,11 +1,7 @@
-import 'dart:convert' as JSON;
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:history_go/src/components/title_logo.dart';
-import 'package:history_go/src/models/user.dart';
-import 'package:http/http.dart' as http;
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 //final GoogleSignIn _googleSignIn = GoogleSignIn();
@@ -147,37 +143,6 @@ class _LoginPageState extends State<LoginPage> {
               ],
             ),
           ),
-          /*Container(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Expanded(
-                  flex: 3,
-                  child: SizedBox(),
-                ),
-                TitleLogo(),
-                SizedBox(
-                  height: 50,
-                ),
-                _EmailPasswordForm(),
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  alignment: Alignment.centerRight,
-                  child: Text('Forgot Password?',
-                      style:
-                          TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
-                ),
-                _divider(),
-                _OtherProvidersSignInSection(),
-                Expanded(
-                  flex: 2,
-                  child: SizedBox(),
-                ),
-              ],
-            ),
-          ),*/
           Align(
             alignment: Alignment.bottomCenter,
             child: _createAccountLabel(),
@@ -198,8 +163,18 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  FocusNode focus;
+
   bool _success;
   String _userEmail;
+
+  @override
+  void initState() {
+    super.initState();
+    
+    focus = FocusNode();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -210,6 +185,10 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
           TextFormField(
             controller: _emailController,
             decoration: const InputDecoration(labelText: 'Email'),
+            textInputAction: TextInputAction.next,
+            onFieldSubmitted: (v) {
+              FocusScope.of(context).requestFocus(focus);
+            },
             validator: (String value) {
               if (value.isEmpty) {
                 return 'Please enter some text';
@@ -220,6 +199,7 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
           TextFormField(
             controller: _passwordController,
             decoration: const InputDecoration(labelText: 'Password'),
+            focusNode: focus,
             obscureText: true,
             validator: (String value) {
               if (value.isEmpty) {
@@ -284,13 +264,6 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
         ));
   }
 
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
-
   void _signInWithEmailAndPassword() async {
     final FirebaseUser user = (await _auth.signInWithEmailAndPassword(
       email: _emailController.text,
@@ -301,12 +274,21 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
       setState(() {
         _success = true;
         _userEmail = user.email;
+        //TODO: Fixa ExceptionHandler
         print('Successful login: email: ' + user.email + " name: " + user.displayName);
-        Navigator.pushNamed(context, "/home");
+        Navigator.pushNamedAndRemoveUntil(context, '/home', ModalRoute.withName('/'));
       });
     } else {
       _success = false;
     }
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    focus.dispose();
+    super.dispose();
   }
 }
 
@@ -366,7 +348,7 @@ class _OtherProvidersSignInSectionState
           if (user != null) {
             _message = 'Successfully signed in with Facebook.\n' + 
               'id: ' + user.uid + "\nname: " + user.displayName;
-            Navigator.pushNamed(context, "/home");
+            Navigator.pushNamedAndRemoveUntil(context, '/home', ModalRoute.withName('/'));
           } else {
             _message = 'Failed to sign in with Facebook. ';
           }
@@ -409,47 +391,3 @@ class _OtherProvidersSignInSectionState
         ));
   }
 }
-
-/* _signInWithFacebook() async {
-    final result = await facebookLogin.logInWithReadPermissions(['email']);
-
-    switch (result.status) {
-      case FacebookLoginStatus.loggedIn:
-        final token = result.accessToken.token;
-        final graphResponse = await http.get(
-            'https://graph.facebook.com/v2.12/me?fields=name,picture,email&access_token=$token');
-        final profile = JSON.jsonDecode(graphResponse.body);
-        print(profile);
-
-        UserInfo.name = profile["name"];
-        UserInfo.id = profile["id"];
-        UserInfo.email = profile["email"];
-        UserInfo.imgUrl = profile["picture"]["url"];
-
-        var response = await http.get(UserInfo.imgUrl); // <--2
-        var documentDirectory = await getApplicationDocumentsDirectory();
-        var firstPath = documentDirectory.path + "/images";
-        var filePathAndName = documentDirectory.path + '/images/pic.jpg';
-        //comment out the next three lines to prevent the image from being saved
-        //to the device to show that it's coming from the internet
-        await Directory(firstPath).create(recursive: true); // <-- 1
-        File file2 = new File(filePathAndName);             // <-- 2
-        file2.writeAsBytesSync(response.bodyBytes);         // <-- 3
-
-        UserInfo.img = Image.file(file2);
-
-            setState(() {
-          userProfile = profile;
-          _isLoggedIn = true;
-        });
-        Navigator.pushNamedAndRemoveUntil(context, '/home', ModalRoute.withName('/'));
-        break;
-
-      case FacebookLoginStatus.cancelledByUser:
-        setState(() => _isLoggedIn = false);
-        break;
-      case FacebookLoginStatus.error:
-        setState(() => _isLoggedIn = false);
-        break;
-    }
-  }*/
