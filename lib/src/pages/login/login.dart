@@ -1,11 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:history_go/src/components/buttons.dart';
 import 'package:history_go/src/components/title_logo.dart';
+import 'package:history_go/src/pages/pages.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 //final GoogleSignIn _googleSignIn = GoogleSignIn();
-bool _isLoggedIn = false;
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
@@ -17,27 +18,6 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   Map userProfile;
-
-  Widget _backButton() {
-    return InkWell(
-      onTap: () {
-        Navigator.pop(context);
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10),
-        child: Row(
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.only(left: 0, top: 10, bottom: 10),
-              child: Icon(Icons.keyboard_arrow_left, color: Colors.black),
-            ),
-            Text('Back',
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500))
-          ],
-        ),
-      ),
-    );
-  }
 
   Widget _divider() {
     return Container(
@@ -67,10 +47,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   _logout() {
-    //facebookLogin.logOut();
-    setState(() {
-      _isLoggedIn = false;
-    });
+    _auth.signOut();
+    setState(() {});
   }
 
   Widget _createAccountLabel() {
@@ -147,7 +125,12 @@ class _LoginPageState extends State<LoginPage> {
             alignment: Alignment.bottomCenter,
             child: _createAccountLabel(),
           ),
-          Positioned(top: 40, left: 0, child: _backButton()),
+          Positioned(
+              top: 40,
+              left: 0,
+              child: CustomBackButton(
+                onPressed: () => Navigator.pop(context),
+              )),
         ],
       ),
     )));
@@ -171,7 +154,7 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
   @override
   void initState() {
     super.initState();
-    
+
     focus = FocusNode();
   }
 
@@ -186,12 +169,15 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
             controller: _emailController,
             decoration: const InputDecoration(labelText: 'Email'),
             textInputAction: TextInputAction.next,
+            keyboardType: TextInputType.emailAddress,
             onFieldSubmitted: (v) {
               FocusScope.of(context).requestFocus(focus);
             },
             validator: (String value) {
               if (value.isEmpty) {
                 return 'Please enter some text';
+              } else if (!Validator.validateEmail(value)) {
+                return 'Please enter a valid email';
               }
               return null;
             },
@@ -265,18 +251,20 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
   }
 
   void _signInWithEmailAndPassword() async {
-    final FirebaseUser user = (await _auth.signInWithEmailAndPassword(
-      email: _emailController.text,
-      password: _passwordController.text,
-    ))
+    final FirebaseUser user = (await _auth
+            .signInWithEmailAndPassword(
+              email: _emailController.text,
+              password: _passwordController.text,
+            )
+            .catchError((error) => print(error)))
         .user;
     if (user != null) {
       setState(() {
         _success = true;
         _userEmail = user.email;
-        //TODO: Fixa ExceptionHandler
-        print('Successful login: email: ' + user.email + " name: " + user.displayName);
-        Navigator.pushNamedAndRemoveUntil(context, '/home', ModalRoute.withName('/'));
+        print('Successful login: email: ' + user.toString());
+        Navigator.pushNamedAndRemoveUntil(
+            context, '/home', ModalRoute.withName('/'));
       });
     } else {
       _success = false;
@@ -326,7 +314,8 @@ class _OtherProvidersSignInSectionState
   }
 
   void _signInWithFacebook() async {
-    final result = await facebookLogin.logInWithReadPermissions(['email']);
+    final result = await facebookLogin
+        .logInWithReadPermissions(["public_profile", "email"]);
 
     switch (result.status) {
       case FacebookLoginStatus.loggedIn:
@@ -346,9 +335,13 @@ class _OtherProvidersSignInSectionState
         assert(user.uid == currentUser.uid);
         setState(() {
           if (user != null) {
-            _message = 'Successfully signed in with Facebook.\n' + 
-              'id: ' + user.uid + "\nname: " + user.displayName;
-            Navigator.pushNamedAndRemoveUntil(context, '/home', ModalRoute.withName('/'));
+            _message = 'Successfully signed in with Facebook.\n' +
+                'id: ' +
+                user.uid +
+                "\nname: " +
+                user.displayName;
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/home', ModalRoute.withName('/'));
           } else {
             _message = 'Failed to sign in with Facebook. ';
           }
@@ -356,10 +349,11 @@ class _OtherProvidersSignInSectionState
 
         break;
       case FacebookLoginStatus.cancelledByUser:
-        setState(() => _isLoggedIn = false);
+        //TODO: add snackbar error message to user
+        print(FacebookLoginStatus.cancelledByUser.toString());
         break;
       case FacebookLoginStatus.error:
-        setState(() => _isLoggedIn = false);
+        print(result.errorMessage);
         break;
     }
   }

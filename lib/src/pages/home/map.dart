@@ -15,7 +15,7 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  Completer<GoogleMapController> _controller = Completer();
+  Completer<GoogleMapController> _controller = new Completer();
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
 
   List<Place> places = new List<Place>();
@@ -28,28 +28,30 @@ class _MapPageState extends State<MapPage> {
   void initState() {
     super.initState();
     updatePlaces();
-    setMarkers();
   }
 
   Future<LatLng> _getUserPosition() async {
     Position position = await Geolocator().getCurrentPosition();
 
-    List<Placemark> placemark =
-        await Geolocator().placemarkFromPosition(position);
-    setState(() {
-      _initPosition = LatLng(position.latitude, position.longitude);
-      print('${placemark[0].name}');
-    });
+    if (this.mounted) {
+      setState(() {
+        _initPosition = LatLng(position.latitude, position.longitude);
+        print('User position: ${_initPosition.toString()}');
+      });
+    }
+
     return _initPosition;
   }
 
   Future<void> updatePlaces() async {
     List<Place> _updatedPlaces =
         await PlaceRepository().getPlaces(await _getUserPosition());
-    this.setState(() {
-      places = _updatedPlaces;
-      setMarkers();
-    });
+    if (this.mounted) {
+      setState(() {
+        places = _updatedPlaces;
+        setMarkers();
+      });
+    }
   }
 
   Widget _settingsButton() {
@@ -175,6 +177,7 @@ class _MapPageState extends State<MapPage> {
   }
 
   void setMarkers() {
+    debugPrint("Setting markers");
     for (Place p in places) {
       addMarker(p);
     }

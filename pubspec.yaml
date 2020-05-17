@@ -26,6 +26,7 @@ dependencies:
   shared_preferences: ^0.5.6+3
   dotenv: ^2.0.0
   google_maps_flutter: ^0.5.26+4
+  google_fonts: ^1.1.0
   carousel_pro: ^1.0.0
   permission_handler: ^5.0.0+hotfix.4
   flutter_facebook_login: ^1.1.1

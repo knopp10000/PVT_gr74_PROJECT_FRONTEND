@@ -36,6 +36,11 @@ class Place {
     this.entries.forEach((entry) {images.add(entry.img);});
     return images;
   }
+
+  @override
+  String toString() {
+    return "Place position: $position, entries:\n$entries";
+  }
 }
 
 class Entries {
@@ -63,6 +68,11 @@ class Entries {
     data['title'] = this.title;
     data['desc'] = this.desc;
     return data;
+  }
+
+  @override
+  String toString() {
+    return "$title, $desc, $date";
   }
 }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:history_go/src/components/buttons.dart';
 import 'package:history_go/src/components/title_logo.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -27,27 +28,6 @@ class _SignUpPageState extends State<SignUpPage> {
     super.initState();
 
     focus = FocusNode();
-  }
-
-  Widget _backButton() {
-    return InkWell(
-      onTap: () {
-        Navigator.pop(context);
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10),
-        child: Row(
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.only(left: 0, top: 10, bottom: 10),
-              child: Icon(Icons.keyboard_arrow_left, color: Colors.black),
-            ),
-            Text('Back',
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500))
-          ],
-        ),
-      ),
-    );
   }
 
   Widget _submitButton() {
@@ -123,13 +103,16 @@ class _SignUpPageState extends State<SignUpPage> {
             controller: _emailController,
             decoration: const InputDecoration(labelText: 'Email'),
             textInputAction: TextInputAction.next,
+            keyboardType: TextInputType.emailAddress,
             onFieldSubmitted: (v) {
               FocusScope.of(context).requestFocus(focus);
             },
             validator: (String value) {
               if (value.isEmpty) {
                 return 'Please enter some text';
-              }
+              } /*else if (!Validator.validateEmail(value)) {
+                return 'Please enter a valid email';
+              }*/
               return null;
             },
           ),
@@ -141,7 +124,12 @@ class _SignUpPageState extends State<SignUpPage> {
             validator: (String value) {
               if (value.isEmpty) {
                 return 'Please enter some text';
-              }
+              } /*else if (!Validator.validatePassword(value)) {
+                return 'Password must contain minimum 8 characters \n'+
+                      'At least one uppercase letter, '+ 
+                      'one lowercase letter\nand one digit\n'+
+                      'Can not contain special characters';
+              }*/
               return null;
             },
           ),
@@ -159,6 +147,7 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   void _register() async {
+    
     final FirebaseUser user = (await _auth.createUserWithEmailAndPassword(
       email: _emailController.text,
       password: _passwordController.text,
@@ -212,7 +201,12 @@ class _SignUpPageState extends State<SignUpPage> {
             alignment: Alignment.bottomCenter,
             child: _loginAccountLabel(),
           ),
-          Positioned(top: 40, left: 0, child: _backButton()),
+          Positioned(
+              top: 40,
+              left: 0,
+              child: CustomBackButton(
+                onPressed: () => Navigator.pop(context),
+              )),
         ],
       ),
     )));
@@ -224,5 +218,20 @@ class _SignUpPageState extends State<SignUpPage> {
     _passwordController.dispose();
     focus.dispose();
     super.dispose();
+  }
+}
+
+class Validator {
+  static final RegExp regExpPassword = new RegExp(r"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$");
+  static final RegExp regExpEmail = new RegExp(r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
+
+  static bool validatePassword(String password) {
+    if (password == null) return false;
+    return regExpPassword.hasMatch(password);
+  }
+
+  static bool validateEmail(String email) {
+    if (email == null) return false;
+    return regExpEmail.hasMatch(email);
   }
 }

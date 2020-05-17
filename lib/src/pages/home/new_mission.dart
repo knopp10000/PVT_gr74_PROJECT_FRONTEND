@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:history_go/src/components/custom_app_bar.dart';
 
-class NewMission extends StatelessWidget {
+class NewMissionPage extends StatelessWidget {
 
   Widget _appBar(String title) {
     return AppBar(
@@ -19,8 +20,7 @@ class NewMission extends StatelessWidget {
       child: SizedBox(
           height: 350.0,
           width: 280.0,
-          child: Image.asset('',
-              fit: BoxFit.cover)
+          //child: Image.asset('',  fit: BoxFit.cover)
       ),
     );
   }
@@ -62,7 +62,7 @@ class NewMission extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _appBar("Stockholms blodbad"),
+      appBar: CustomAppBar("Stockholms blodbad"),
       body: Center(
         child: Container(
           width: MediaQuery

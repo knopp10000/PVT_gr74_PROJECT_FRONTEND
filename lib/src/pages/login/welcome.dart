@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:history_go/src/components/title_logo.dart';
+import 'package:history_go/src/pages/pages.dart';
 
 class WelcomePage extends StatefulWidget {
   WelcomePage({Key key, this.title}) : super(key: key);
@@ -10,6 +12,7 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<WelcomePage> {
+  
   Widget _loginButton() {
     return InkWell(
       onTap: () {
@@ -58,8 +61,7 @@ class _WelcomePageState extends State<WelcomePage> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget _welcomePage() {
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -98,6 +100,28 @@ class _WelcomePageState extends State<WelcomePage> {
           ),
         ),
       ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<FirebaseUser>(
+      stream: FirebaseAuth.instance.onAuthStateChanged,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.active) {
+          FirebaseUser user = snapshot.data;
+          if (user == null) {
+            return _welcomePage();
+          }
+          return HomePage();
+        } else {
+          return Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+      },
     );
   }
 }
