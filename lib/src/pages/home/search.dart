@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:history_go/src/pages/MessagingWidget.dart';
 import 'package:history_go/src/pages/pages.dart';
 
 class SearchPage extends StatelessWidget {
@@ -10,6 +11,8 @@ class SearchPage extends StatelessWidget {
     return Container(
       color: color,
       child: Center(
+        child: MessagingWidget(),
+        /*
         child: FlatButton(
           onPressed: () {
             Navigator.pushNamed(context, '/info');
@@ -18,7 +21,7 @@ class SearchPage extends StatelessWidget {
             'Kaknästornet',
             style: TextStyle(fontSize: 25),
           ),
-        ),
+        ),*/
       ),
     );
   }
